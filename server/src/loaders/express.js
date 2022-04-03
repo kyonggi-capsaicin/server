@@ -1,11 +1,16 @@
+import "reflect-metadata";
 import express from "express";
+import morgan from "morgan";
 
 import dataRouter from "../routers/dataRouter";
+import postRouter from "../routers/postRouter";
 
 export default (app) => {
   app.use(express.json());
+  app.use(morgan("dev"));
 
   app.use("/api/data", dataRouter);
+  app.use("/api/posts", postRouter);
 
   /// catch 404 and forward to error handler
   app.use((req, res, next) => {

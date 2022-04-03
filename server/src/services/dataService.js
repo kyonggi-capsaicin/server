@@ -63,52 +63,6 @@ export default class dataService {
 
       const result = [];
 
-      //   (async () => {
-      //     for (let item of items) {
-      //       try {
-      //         const {
-      //           mrhstNm,
-      //           mrhstCode,
-      //           ctprvnNm,
-      //           signguNm,
-      //           signguCode,
-      //           rdnmadr,
-      //           latitude,
-      //           longitude,
-      //           phoneNumber,
-      //           weekdayOperOpenHhmm,
-      //           weekdayOperColseHhmm,
-      //           satOperOperOpenHhmm,
-      //           satOperCloseHhmm,
-      //           holidayOperOpenHhmm,
-      //           holidayCloseOpenHhmm,
-      //         } = item;
-
-      //         const child = new Child({
-      //           name: mrhstNm,
-      //           code: mrhstCode,
-      //           cityName: ctprvnNm,
-      //           fullCityName: signguNm,
-      //           fullCityNameCode: signguCode,
-      //           address: rdnmadr,
-      //           lat: latitude,
-      //           lng: longitude,
-      //           phoneNumber: phoneNumber,
-      //           weekdayStartTime: weekdayOperOpenHhmm,
-      //           weekdayEndTime: weekdayOperColseHhmm,
-      //           weekendStartTime: satOperOperOpenHhmm,
-      //           weekendEndTime: satOperCloseHhmm,
-      //           holydayStartTime: holidayOperOpenHhmm,
-      //           holydayEndTime: holidayCloseOpenHhmm,
-      //         });
-
-      //         await child.save();
-      //       } catch (error) {
-      //         console.error(error);
-      //       }
-      //     }
-      //   })();
-
       for (let i = 0; i < items.length; i++) {
         const {
           mrhstNm,

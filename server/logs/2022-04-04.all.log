@@ -1,0 +1,32 @@
+2022-04-04 00:01:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-04 00:02:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-04 00:03:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-04 00:03:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-04 00:03:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-04 00:03:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-04 00:04:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-04 00:05:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-04 00:06:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-04 00:06:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-04 00:09:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-04 00:10:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-04 00:10:01 [백엔드 맛보기] error: Service with "postService" identifier was not found in the container. Register it before usage via explicitly calling the "Container.set" function or using the "@Service()" decorator.
+2022-04-04 00:11:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-04 00:11:01 [백엔드 맛보기] error: Service with "postService" identifier was not found in the container. Register it before usage via explicitly calling the "Container.set" function or using the "@Service()" decorator.
+2022-04-04 00:11:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-04 00:27:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-04 00:27:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-04 00:28:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-04 00:31:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-04 00:32:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-04 00:33:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-04 00:33:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-04 00:40:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-04 00:40:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-04 00:40:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-04 00:41:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-04 00:41:01 [백엔드 맛보기] error: _a.getMetadata is not a function
+2022-04-04 00:42:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-04 00:42:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-04 00:42:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-04 00:44:01 [백엔드 맛보기] info: Server listening on 4000

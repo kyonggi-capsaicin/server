@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
-import "./db";
+import "../config/db";
+import logger from "../config/logger";
 
 const startServer = async () => {
   const PORT = process.env.PORT || 4000;
@@ -11,7 +12,7 @@ const startServer = async () => {
   await require("./loaders/express").default(app);
 
   app.listen(process.env.PORT, () => {
-    console.log(`Server listening on ${PORT}`);
+    logger.info(`Server listening on ${PORT}`);
   });
 
   process.on("uncaughtException", function (err) {

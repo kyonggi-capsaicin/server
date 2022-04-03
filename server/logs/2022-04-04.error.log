@@ -1,0 +1,3 @@
+2022-04-04 00:10:01 [백엔드 맛보기] error: Service with "postService" identifier was not found in the container. Register it before usage via explicitly calling the "Container.set" function or using the "@Service()" decorator.
+2022-04-04 00:11:01 [백엔드 맛보기] error: Service with "postService" identifier was not found in the container. Register it before usage via explicitly calling the "Container.set" function or using the "@Service()" decorator.
+2022-04-04 00:41:01 [백엔드 맛보기] error: _a.getMetadata is not a function
