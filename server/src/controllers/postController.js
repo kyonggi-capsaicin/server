@@ -1,4 +1,4 @@
-import logger from "../../config/logger";
+import logger from "../config/logger";
 import postService from "../services/postService";
 
 import { Container } from "typedi";
@@ -24,7 +24,10 @@ export const getPost = async (req, res, next) => {
 
 export const createPost = async (req, res, next) => {
   try {
+    const post = await postServiceInstance.createPost(req.body);
+    return res.status(201).json({ message: "success", data: post });
   } catch (error) {
+    logger.error(error.message);
     next(error);
   }
 };

@@ -18,6 +18,12 @@ const userSchema = new mongoose.Schema(
       required: false,
     },
 
+    email: {
+      type: String,
+      required: true,
+      unique: 1,
+    },
+
     // ref라는 옵션에 참조할 모델(collection)명을 삽입.
     // 선한영향력가게 가맹점 스크랩
     scrapSunhan: [{ type: mongoose.Types.ObjectId, ref: "Sunhan" }],

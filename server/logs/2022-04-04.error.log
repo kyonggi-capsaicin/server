@@ -1,3 +1,15 @@
 2022-04-04 00:10:01 [백엔드 맛보기] error: Service with "postService" identifier was not found in the container. Register it before usage via explicitly calling the "Container.set" function or using the "@Service()" decorator.
 2022-04-04 00:11:01 [백엔드 맛보기] error: Service with "postService" identifier was not found in the container. Register it before usage via explicitly calling the "Container.set" function or using the "@Service()" decorator.
 2022-04-04 00:41:01 [백엔드 맛보기] error: _a.getMetadata is not a function
+2022-04-04 00:54:01 [백엔드 맛보기] error: Post validation failed: writer.nickname: Path `writer.nickname` is required., writer._id: Path `writer._id` is required.
+2022-04-04 00:54:01 [백엔드 맛보기] error: success is not defined
+2022-04-04 00:54:01 [백엔드 맛보기] error: Post validation failed: writer.nickname: Path `writer.nickname` is required., writer._id: Path `writer._id` is required.
+2022-04-04 01:12:01 [백엔드 맛보기] error: Post validation failed: writer.nickname: Path `writer.nickname` is required., writer._id: Path `writer._id` is required.
+2022-04-04 01:13:01 [백엔드 맛보기] error: Post validation failed: writer.nickname: Path `writer.nickname` is required., writer._id: Path `writer._id` is required.
+2022-04-04 01:13:01 [백엔드 맛보기] error: Post validation failed: writer.nickname: Path `writer.nickname` is required., writer._id: Path `writer._id` is required.
+2022-04-04 01:15:01 [백엔드 맛보기] error: Post validation failed: writer.nickname: Path `writer.nickname` is required., writer._id: Path `writer._id` is required.
+2022-04-04 01:15:01 [백엔드 맛보기] error: Post validation failed: writer.nickname: Path `writer.nickname` is required., writer._id: Path `writer._id` is required.
+2022-04-04 01:16:01 [백엔드 맛보기] error: Post validation failed: writer.nickname: Path `writer.nickname` is required., writer._id: Path `writer._id` is required.
+2022-04-04 01:16:01 [백엔드 맛보기] error: Post validation failed: writer.nickname: Path `writer.nickname` is required., writer._id: Path `writer._id` is required.
+2022-04-04 01:16:01 [백엔드 맛보기] error: Post validation failed: writer.nickname: Path `writer.nickname` is required., writer._id: Path `writer._id` is required.
+2022-04-04 01:16:01 [백엔드 맛보기] error: Post validation failed: writer.nickname: Path `writer.nickname` is required., writer._id: Path `writer._id` is required.

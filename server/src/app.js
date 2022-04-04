@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
-import "../config/db";
-import logger from "../config/logger";
+import "./config/db";
+import logger from "./config/logger";
 
 const startServer = async () => {
   const PORT = process.env.PORT || 4000;

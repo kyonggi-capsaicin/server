@@ -4,6 +4,7 @@ import morgan from "morgan";
 
 import dataRouter from "../routers/dataRouter";
 import postRouter from "../routers/postRouter";
+import authRouter from "../routers/authRouter";
 
 export default (app) => {
   app.use(express.json());
@@ -11,6 +12,7 @@ export default (app) => {
 
   app.use("/api/data", dataRouter);
   app.use("/api/posts", postRouter);
+  app.use("/api/auth", authRouter);
 
   /// catch 404 and forward to error handler
   app.use((req, res, next) => {
