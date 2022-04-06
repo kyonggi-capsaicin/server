@@ -2,6 +2,7 @@ import logger from "../config/logger";
 import postService from "../services/postService";
 
 import { Container } from "typedi";
+import throwError from "../utils/throwError";
 
 const postServiceInstance = Container.get(postService);
 
@@ -10,7 +11,7 @@ export const getAllPosts = async (req, res, next) => {
     const posts = await postServiceInstance.getAllPosts();
     return res.status(200).json({ message: "success", data: posts });
   } catch (error) {
-    logger.error(error.message);
+    console.error(error);
     next(error);
   }
 };
@@ -24,10 +25,10 @@ export const getPost = async (req, res, next) => {
 
 export const createPost = async (req, res, next) => {
   try {
-    const post = await postServiceInstance.createPost(req.body);
+    const post = await postServiceInstance.createPost(req.id, req.body);
     return res.status(201).json({ message: "success", data: post });
   } catch (error) {
-    logger.error(error.message);
+    console.error(error);
     next(error);
   }
 };

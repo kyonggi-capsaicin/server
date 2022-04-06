@@ -1,4 +1,5 @@
 import express from "express";
+import authJWT from "../middlewares/authJWT";
 
 import {
   getAllPosts,
@@ -17,14 +18,14 @@ postRouter.get("/", getAllPosts);
 postRouter.get("/:id", getPost);
 
 // 게시글 만들기
-postRouter.post("/", createPost);
+postRouter.post("/", authJWT, createPost);
 
 // 게시글 수정하기
-postRouter.patch("/:id", updatePost);
+postRouter.patch("/:id", authJWT, updatePost);
 // 특정 게시글 신고하기
-postRouter.patch("/:id/block", blockPost);
+postRouter.patch("/:id/block", authJWT, blockPost);
 
 // 게시글 삭제하기
-postRouter.delete("/:id", deletePost);
+postRouter.delete("/:id", authJWT, deletePost);
 
 export default postRouter;

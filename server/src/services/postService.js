@@ -1,11 +1,17 @@
 import { Service } from "typedi";
 import Post from "../models/posts";
+import User from "../models/users";
+import throwError from "../utils/throwError";
+import serviceError from "../utils/serviceError";
+import { isValidObjectId } from "mongoose";
+import seoulDate from "../utils/seoulDate";
 import logger from "../config/logger";
 
 @Service()
 export default class postService {
   constructor() {
     this.post = Post;
+    this.user = User;
   }
 
   async getAllPosts() {
@@ -13,20 +19,32 @@ export default class postService {
       const posts = await this.post.find({});
       return posts;
     } catch (error) {
-      logger.error(error.message);
+      console.error(error.message);
+      throw serviceError(error);
     }
   }
 
-  async createPost(postDTO) {
+  async createPost(userId, postDTO) {
     try {
-      // todo
-      // 1. 유저 찾고 post의 writer 필드에 넣기
+      if (!isValidObjectId(userId)) {
+        throw throwError(400, "userId가 유효하지 않습니다.");
+      }
 
-      const posts = await this.post.create(postDTO);
-      return posts;
+      const user = await this.user.findById(userId);
+
+      postDTO.writer = user;
+      postDTO.createAt = seoulDate;
+      postDTO.updateAt = seoulDate;
+
+      const newPost = new this.post(postDTO);
+      user.writePosts = newPost.id;
+
+      const [post] = await Promise.all([newPost.save(), user.save()]);
+
+      return post;
     } catch (error) {
-      logger.error(error.message);
-      throw Error(error.message);
+      console.error(error.message);
+      throw serviceError(error);
     }
   }
 }

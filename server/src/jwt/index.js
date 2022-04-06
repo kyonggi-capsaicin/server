@@ -1,8 +1,7 @@
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 import logger from "../config/logger";
-import redisClient from "../utils/throwError";
-import { promisify } from "util";
+import redisClient from "../utils/redis";
 
 dotenv.config();
 
@@ -12,6 +11,7 @@ export const sign = (user) => {
   const payload = {
     // access token에 들어갈 payload
     id: user.id,
+    nickname: user.nickname,
   };
 
   return jwt.sign(payload, JWT_SECRET, {
@@ -49,12 +49,10 @@ export const refresh = () => {
 
 export const refreshVerify = async (refreshToken, userId) => {
   // refresh token 검증
-  /* redis 모듈은 기본적으로 promise를 반환하지 않으므로,
-       promisify를 이용하여 promise를 반환하게 해줍니다.*/
-  const getAsync = promisify(redisClient.get).bind(redisClient);
 
   try {
-    const redisRefreshToken = await getAsync(userId); // refresh token 가져오기
+    // refresh token 가져오기
+    const redisRefreshToken = await redisClient.get(userId);
 
     if (refreshToken === redisRefreshToken) {
       try {
