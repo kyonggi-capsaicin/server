@@ -57,3 +57,49 @@ https://www.mongodb.com/blog/post/6-rules-of-thumb-for-mongodb-schema-design-par
 <br>
 
 https://blog.voidmainvoid.net/241
+
+<br>
+
+### express DI 구현하기
+
+---
+
+<br>
+
+https://charming-kyu.tistory.com/17
+
+https://medium.com/lemonade-engineering/node-js%EB%A1%9C-%EC%84%A4%EB%AA%85%ED%95%98%EB%8A%94-di-b4a8acf9ce25
+
+https://dawitblog.tistory.com/178
+
+https://darrengwon.tistory.com/1363
+
+<br>
+
+### typeDI without typescript
+
+---
+
+<Br>
+
+https://docs.typestack.community/typedi/usage-without-typescript/01-getting-started
+
+<br>
+
+### atlas mongodb dump
+
+---
+
+<br>
+
+✔ dump: mongodump --uri "mongodb+srv://magicnc7:khxwRKSNHEnaCSnq@wonjae.6bjmm.mongodb.net/sunhan_test"
+
+<br>
+
+✔ 복구 : mongorestore --uri "mongodb+srv://magicnc7:khxwRKSNHEnaCSnq@wonjae.6bjmm.mongodb.net/sunhan_test" --db sunhan ./dump/sunhan_test
+
+<br>
+
+### mongDB Projection
+
+---

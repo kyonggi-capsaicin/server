@@ -42,8 +42,17 @@ const sunhanSchema = new mongoose.Schema({
   },
 
   // 이미지
-
   image: {
+    type: String,
+  },
+
+  // 카테고리
+  category: {
+    type: String,
+  },
+
+  // 상세 카테고리
+  detailCategory: {
     type: String,
   },
 });

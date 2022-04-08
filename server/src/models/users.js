@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
   // 선한영향력가게 가맹점 스크랩
   scrapSunhan: [{ type: mongoose.Types.ObjectId, ref: "Sunhan" }],
   // 아동급식카드 가맹점 스크랩
-  scrapChild: [{ type: mongoose.Types.ObjectId, ref: "ChildCard" }],
+  scrapChild: [{ type: mongoose.Types.ObjectId, ref: "Child" }],
   // 작성한 감사의 편지
   writeReviews: [{ type: mongoose.Types.ObjectId, ref: "Review" }],
   // 작성한 커뮤니티 게시글

@@ -1,7 +1,6 @@
-import logger from "../config/logger";
 import postService from "../services/postService";
-
 import { Container } from "typedi";
+import logger from "../config/logger";
 import throwError from "../utils/throwError";
 
 const postServiceInstance = Container.get(postService);
