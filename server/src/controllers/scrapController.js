@@ -31,6 +31,11 @@ export const patchScrap = async (req, res, next) => {
 
 export const deleteScrap = async (req, res, next) => {
   try {
+    const { id: shopId } = req.params;
+    const { type } = req.query;
+
+    await scrapServiceInstance.deleteScrap(req.id, shopId, type);
+    return res.status(200).json({ message: "success" });
   } catch (error) {
     console.error(error);
     next(error);

@@ -59,4 +59,29 @@ export default class scrapService {
       throw serviceError(error);
     }
   }
+
+  async deleteScrap(userId, shopId, type) {
+    try {
+      if (!isValidObjectId(userId)) {
+        throw throwError(400, "userId가 유효하지 않습니다.");
+      }
+
+      if (!isValidObjectId(shopId)) {
+        throw throwError(400, "shopId가 유효하지 않습니다.");
+      }
+
+      if (type === "sunhan") {
+        await this.user.findByIdAndUpdate(userId, {
+          $pull: { scrapSunhan: shopId },
+        });
+      } else if (type === "children") {
+        await this.user.findByIdAndUpdate(userId, {
+          $pull: { scrapChild: shopId },
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      throw serviceError(error);
+    }
+  }
 }
