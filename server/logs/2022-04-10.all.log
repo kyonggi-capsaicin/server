@@ -1,0 +1,10 @@
+2022-04-10 00:03:00 [백엔드 맛보기] error: verify error jwt expired
+2022-04-10 00:03:00 [백엔드 맛보기] error: verify error jwt expired
+2022-04-10 00:03:00 [백엔드 맛보기] info: GET /refresh 200 Response: "success: true"
+2022-04-10 00:08:00 [백엔드 맛보기] info: Server listening on 4000
+2022-04-10 00:08:00 [백엔드 맛보기] info: Server listening on 4000
+2022-04-10 00:10:00 [백엔드 맛보기] error: verify error jwt expired
+2022-04-10 00:10:00 [백엔드 맛보기] error: verify error jwt expired
+2022-04-10 00:10:00 [백엔드 맛보기] info: GET /refresh 200 Response: "success: true"
+2022-04-10 00:15:00 [백엔드 맛보기] info: Server listening on 4000
+2022-04-10 00:16:00 [백엔드 맛보기] info: Server listening on 4000

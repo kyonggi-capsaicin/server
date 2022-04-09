@@ -54,6 +54,12 @@ export const commentSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+
+  // 커뮤니티 게시글 or 감사의 편지가 삭제되었을 경우 true
+  isDelete: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const Comment = mongoose.model("Comment", commentSchema);

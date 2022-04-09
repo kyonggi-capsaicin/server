@@ -1,6 +1,7 @@
 import { Service } from "typedi";
 import Post from "../models/posts";
 import User from "../models/users";
+import Comment from "../models/comments";
 import throwError from "../utils/throwError";
 import serviceError from "../utils/serviceError";
 import { isValidObjectId } from "mongoose";
@@ -12,6 +13,7 @@ export default class postService {
   constructor() {
     this.post = Post;
     this.user = User;
+    this.comment = Comment;
   }
 
   async getAllPosts(page) {
@@ -56,9 +58,13 @@ export default class postService {
       postDTO.updateAt = seoulDate;
 
       const newPost = new this.post(postDTO);
-      user.writePosts = newPost.id;
 
-      const [post] = await Promise.all([newPost.save(), user.save()]);
+      const [post] = await Promise.all([
+        newPost.save(),
+        this.user.findByIdAndUpdate(userId, {
+          $push: { writePosts: { $each: [newPost.id], $position: 0 } },
+        }),
+      ]);
 
       const postWithoutVersion = await this.post.findById(post.id, { __v: 0 });
 
@@ -100,6 +106,26 @@ export default class postService {
         this.user.findByIdAndUpdate(userId, {
           $addToSet: { blockPosts: postId },
         }),
+      ]);
+    } catch (error) {
+      console.error(error);
+      throw serviceError(error);
+    }
+  }
+
+  async deletePost(userId, postId) {
+    try {
+      if (!isValidObjectId(userId)) {
+        throw throwError(400, "userId가 유효하지 않습니다.");
+      }
+
+      if (!isValidObjectId(postId)) {
+        throw throwError(400, "postId가 유효하지 않습니다.");
+      }
+
+      await Promise.all([
+        this.user.findByIdAndUpdate(userId, { $pull: { writePosts: postId } }),
+        this.comment.updateMany({ postId }, { $set: { isDelete: true } }),
       ]);
     } catch (error) {
       console.error(error);
