@@ -10,6 +10,8 @@ const authServiceInstance = Container.get(authService);
 
 export const naverLogin = async (req, res, next) => {
   try {
+    let user;
+
     if (!req.headers.authorization) {
       return next(throwError(400, "header에 accessToken이 없습니다."));
     }
@@ -33,12 +35,11 @@ export const naverLogin = async (req, res, next) => {
       AccessToken
     );
 
-    const exUser = await authServiceInstance.exUser(id, "naver");
-    if (exUser) {
-      return next(throwError(400, "존재하는 email 계정입니다."));
+    user = await authServiceInstance.exUser(id, "naver");
+    // 유저가 존재하지 않는다면
+    if (!user) {
+      user = await authServiceInstance.createUser(email, id, "naver");
     }
-
-    const user = await authServiceInstance.createUser(email, id, "naver");
 
     // jwt 발급
     const accessToken = sign(user);
@@ -55,6 +56,8 @@ export const naverLogin = async (req, res, next) => {
 };
 
 export const kakaoLogin = async (req, res, next) => {
+  let user;
+
   try {
     if (!req.headers.authorization) {
       return next(throwError(400, "header에 accessToken이 없습니다."));
@@ -80,12 +83,10 @@ export const kakaoLogin = async (req, res, next) => {
       AccessToken
     );
 
-    const exUser = await authServiceInstance.exUser(id, "kakao");
-    if (exUser) {
-      return next(throwError(400, "존재하는 email 계정입니다."));
+    const user = await authServiceInstance.exUser(id, "kakao");
+    if (!user) {
+      user = await authServiceInstance.createUser(email, id, "naver");
     }
-
-    const user = await authServiceInstance.createUser(email, id, "kakao");
 
     // jwt 발급
     const accessToken = sign(user);
@@ -103,6 +104,8 @@ export const kakaoLogin = async (req, res, next) => {
 
 export const googleLogin = async (req, res, next) => {
   try {
+    let user;
+
     if (!req.headers.authorization) {
       return next(throwError(400, "header에 accessToken이 없습니다."));
     }
@@ -123,13 +126,11 @@ export const googleLogin = async (req, res, next) => {
       AccessToken
     );
 
-    const exUser = await authServiceInstance.exUser(id, "google");
+    user = await authServiceInstance.exUser(id, "google");
 
-    if (exUser) {
-      return next(throwError(400, "존재하는 email 계정입니다."));
+    if (!user) {
+      user = await authServiceInstance.createUser(email, id, "naver");
     }
-
-    const user = await authServiceInstance.createUser(email, id, "google");
 
     // jwt 발급
     const accessToken = sign(user);

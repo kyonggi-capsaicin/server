@@ -6,39 +6,9 @@
     "auditLog": "logs\\.8ab799a1ad6099428793717602df7744c615b745-audit.json",
     "files": [
         {
-            "date": 1648977207890,
-            "name": "logs\\2022-04-03.error.log",
-            "hash": "58781b5a18e60d4987233ca6465104dc"
-        },
-        {
-            "date": 1648998113575,
-            "name": "logs\\2022-04-04.error.log",
-            "hash": "26cb2f0dd982d45989b7c9cfa7b0ae5e"
-        },
-        {
-            "date": 1649084420482,
-            "name": "logs\\2022-04-05.error.log",
-            "hash": "b8fae3d95410096a17b982fc1b5735a0"
-        },
-        {
-            "date": 1649211982005,
-            "name": "logs\\2022-04-06.error.log",
-            "hash": "6c52a79f48d6b7d7d0f8383a684b3563"
-        },
-        {
-            "date": 1649257313468,
-            "name": "logs\\2022-04-07.error.log",
-            "hash": "6df243f340915cc28fdb957a361be168"
-        },
-        {
-            "date": 1649344748798,
-            "name": "logs\\2022-04-08.error.log",
-            "hash": "61cdff5eeb035e6f30acdb146b7aa9a3"
-        },
-        {
-            "date": 1649434189356,
+            "date": 1649485026872,
             "name": "logs\\2022-04-09.error.log",
-            "hash": "b2fa8ccef337c904325f883862ef4bab"
+            "hash": "dbdd363469c3bc63ec8e656fdc922920"
         }
     ],
     "hashType": "md5"
