@@ -14,9 +14,14 @@ export default class postService {
     this.user = User;
   }
 
-  async getAllPosts() {
+  async getAllPosts(page) {
     try {
-      const posts = await this.post.find({}, { __v: 0 });
+      const posts = await this.post
+        .find({}, { __v: 0 })
+        .sort({ _id: -1 })
+        .skip(page * 10)
+        .limit(10);
+
       return posts;
     } catch (error) {
       console.error(error.message);

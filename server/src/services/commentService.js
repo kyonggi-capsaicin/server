@@ -101,4 +101,61 @@ export default class commentService {
       throw serviceError(error);
     }
   }
+
+  async getComment(commentId) {
+    try {
+      if (!isValidObjectId(commentId)) {
+        throw throwError(400, "commentId가 유효하지 않습니다.");
+      }
+
+      const comment = await this.coment.findById(commentId, { __v: 0 });
+      return comment;
+    } catch (error) {
+      console.error(error);
+      throw serviceError(error);
+    }
+  }
+
+  async updateComment(commentId, updateCommentDTO) {
+    try {
+      if (!isValidObjectId(commentId)) {
+        throw throwError(400, "commentId가 유효하지 않습니다.");
+      }
+
+      updateCommentDTO.updateAt = seoulDate;
+
+      const updatedComment = await this.coment.findByIdAndUpdate(
+        commentId,
+        updateCommentDTO,
+        { new: true, projection: { __v: 0 } }
+      );
+      return updatedComment;
+    } catch (error) {
+      console.error(error);
+      throw serviceError(error);
+    }
+  }
+
+  async deletePostComment(userId, commentId, postId) {
+    try {
+      if (!isValidObjectId(commentId)) {
+        throw throwError(400, "commentId가 유효하지 않습니다.");
+      }
+
+      if (!isValidObjectId(postId)) {
+        throw throwError(400, "postId가 유효하지 않습니다.");
+      }
+
+      await Promise.all([
+        this.user.findByIdAndUpdate(userId, {
+          $pull: { writeComments: commentId },
+        }),
+        this.coment.findByIdAndDelete(commentId),
+        this.post.findByIdAndUpdate(postId, { $inc: { commentCount: -1 } }),
+      ]);
+    } catch (error) {
+      console.error(error);
+      throw serviceError(error);
+    }
+  }
 }

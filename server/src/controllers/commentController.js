@@ -31,6 +31,10 @@ export const getAllPostComments = async (req, res, next) => {
 
 export const getComment = async (req, res, next) => {
   try {
+    const { id: commentId } = req.params;
+
+    const comment = await commentServiceInstance.getComment(commentId);
+    return res.status(200).json({ message: "success", data: comment });
   } catch (error) {
     console.error(error);
     next(error);
@@ -73,6 +77,14 @@ export const createPostComment = async (req, res, next) => {
 
 export const updateComment = async (req, res, next) => {
   try {
+    const { id: commentId } = req.params;
+
+    const comment = await commentServiceInstance.updateComment(
+      commentId,
+      req.body
+    );
+
+    return res.status(200).json({ message: "success", data: comment });
   } catch (error) {
     console.error(error);
     next(error);
@@ -95,8 +107,22 @@ export const deleteParentComment = async (req, res, next) => {
   }
 };
 
-export const deleteComment = async (req, res, next) => {
+export const deleteReviewComment = async (req, res, next) => {
   try {
+    const { id: commentId } = req.params;
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
+export const deletePostComment = async (req, res, next) => {
+  try {
+    const { id: commentId } = req.params;
+    const { postId } = req.query;
+
+    await commentServiceInstance.deletePostComment(req.id, commentId, postId);
+    return res.status(200).json({ message: "success" });
   } catch (error) {
     console.error(error);
     next(error);

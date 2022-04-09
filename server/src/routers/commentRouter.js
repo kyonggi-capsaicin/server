@@ -10,14 +10,15 @@ import {
   updateComment,
   blockComment,
   deleteParentComment,
-  deleteComment,
+  deleteReviewComment,
+  deletePostComment
 } from "../controllers/commentController";
 
 const commentRouter = express.Router();
 
-commentRouter.get("/review/:id", getAllReviewComments);
+commentRouter.get("/:id/review", getAllReviewComments);
 
-commentRouter.get("/post/:id", getAllPostComments);
+commentRouter.get("/:id/post", getAllPostComments);
 
 commentRouter.get("/:id", getComment);
 
@@ -31,6 +32,8 @@ commentRouter.patch("/:id/block", authJWT, blockComment);
 
 commentRouter.put("/:id/parent", authJWT, deleteParentComment);
 
-commentRouter.delete("/:id", authJWT, deleteComment);
+commentRouter.delete("/:id/review", authJWT, deleteReviewComment);
+
+commentRouter.delete("/:id/post", authJWT, deletePostComment);
 
 export default commentRouter;

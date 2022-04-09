@@ -7,7 +7,10 @@ const postServiceInstance = Container.get(postService);
 
 export const getAllPosts = async (req, res, next) => {
   try {
-    const posts = await postServiceInstance.getAllPosts();
+    let { page } = req.query;
+    page = page ? page : 0;
+
+    const posts = await postServiceInstance.getAllPosts(page);
     return res.status(200).json({ message: "success", data: posts });
   } catch (error) {
     console.error(error);
@@ -40,8 +43,8 @@ export const updatePost = async (req, res, next) => {
   try {
     const { id: postId } = req.params;
 
-    const updatedPost = await postServiceInstance.updatePost(postId, req.body);
-    return res.status(200).json({ message: "success", data: updatedPost });
+    const post = await postServiceInstance.updatePost(postId, req.body);
+    return res.status(200).json({ message: "success", data: post });
   } catch (error) {
     next(error);
   }
