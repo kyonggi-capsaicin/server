@@ -34,10 +34,11 @@ const userSchema = new mongoose.Schema({
   // 작성한 댓글
   writeComments: [{ type: mongoose.Types.ObjectId, ref: "Comment" }],
   // 커뮤니티 게시글 신고
-  blockPosts: [{ type: mongoose.Types.ObjectId }],
+  blockPosts: [{ type: mongoose.Types.ObjectId, ref: "Post" }],
   // 감사의 편지 신고
-  blockReviews: [{ type: mongoose.Types.ObjectId }],
-
+  blockReviews: [{ type: mongoose.Types.ObjectId, ref: "Review" }],
+  // 댓글 신고
+  blockComments: [{ type: mongoose.Types.ObjectId, ref: "Comment" }],
   // 유저 신고
   blockUsers: [
     {

@@ -93,6 +93,10 @@ export const updateComment = async (req, res, next) => {
 
 export const blockComment = async (req, res, next) => {
   try {
+    const { id: commentId } = req.params;
+
+    await commentServiceInstance.blockComment(req.id, commentId);
+    return res.status(200).json({ message: "success" });
   } catch (error) {
     console.error(error);
     next(error);

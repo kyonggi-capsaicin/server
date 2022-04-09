@@ -158,4 +158,26 @@ export default class commentService {
       throw serviceError(error);
     }
   }
+
+  async blockComment(userId, commentId) {
+    try {
+      if (!isValidObjectId(userId)) {
+        throw throwError(400, "userId가 유효하지 않습니다.");
+      }
+
+      if (!isValidObjectId(commentId)) {
+        throw throwError(400, "commentId가 유효하지 않습니다.");
+      }
+
+      await Promise.all([
+        this.user.findByIdAndUpdate(userId, {
+          $addToSet: { blockComments: commentId },
+        }),
+        this.coment.findByIdAndUpdate(commentId, { $inc: { blockNumber: 1 } }),
+      ]);
+    } catch (error) {
+      console.error(error);
+      throw serviceError(error);
+    }
+  }
 }
