@@ -46,6 +46,10 @@ export const reviewSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+
+  commentCount: {
+    type: Number,
+  },
 });
 
 const Review = mongoose.model("Review", reviewSchema);

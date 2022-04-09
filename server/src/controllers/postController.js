@@ -17,6 +17,10 @@ export const getAllPosts = async (req, res, next) => {
 
 export const getPost = async (req, res, next) => {
   try {
+    const { id: postId } = req.params;
+
+    const post = await postServiceInstance.getPost(postId);
+    return res.status(200).json({ message: "success", data: post });
   } catch (error) {
     next(error);
   }
@@ -34,6 +38,10 @@ export const createPost = async (req, res, next) => {
 
 export const updatePost = async (req, res, next) => {
   try {
+    const { id: postId } = req.params;
+
+    const updatedPost = await postServiceInstance.updatePost(postId, req.body);
+    return res.status(200).json({ message: "success", data: updatedPost });
   } catch (error) {
     next(error);
   }
@@ -41,6 +49,10 @@ export const updatePost = async (req, res, next) => {
 
 export const blockPost = async (req, res, next) => {
   try {
+    const { id: postId } = req.params;
+    await postServiceInstance.blockPost(req.id, postId);
+
+    return res.status(200).json({ message: "success" });
   } catch (error) {
     next(error);
   }

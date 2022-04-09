@@ -31,7 +31,8 @@ const userSchema = new mongoose.Schema({
   writeReviews: [{ type: mongoose.Types.ObjectId, ref: "Review" }],
   // 작성한 커뮤니티 게시글
   writePosts: [{ type: mongoose.Types.ObjectId, ref: "Post" }],
-
+  // 작성한 댓글
+  writeComments: [{ type: mongoose.Types.ObjectId, ref: "Comment" }],
   // 커뮤니티 게시글 신고
   blockPosts: [{ type: mongoose.Types.ObjectId }],
   // 감사의 편지 신고

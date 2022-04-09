@@ -22,6 +22,12 @@ export const commentSchema = new mongoose.Schema({
     ref: "Post",
   },
 
+  // 어떤 감사의 편지의 댓글인지
+  reviewId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Review",
+  },
+
   content: {
     type: String,
     required: true,
