@@ -158,9 +158,8 @@ export const deleteReviewComment = async (req, res, next) => {
 export const deletePostComment = async (req, res, next) => {
   try {
     const { id: commentId } = req.params;
-    const { postId } = req.query;
 
-    await commentServiceInstance.deletePostComment(req.id, commentId, postId);
+    await commentServiceInstance.deletePostComment(req.id, commentId);
     return res.status(200).json({ message: "success" });
   } catch (error) {
     console.error(error);

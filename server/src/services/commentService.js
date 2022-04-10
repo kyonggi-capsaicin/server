@@ -180,22 +180,29 @@ export default class commentService {
     }
   }
 
-  async deletePostComment(userId, commentId, postId) {
+  async deletePostComment(userId, commentId) {
     try {
+      if (!isValidObjectId(userId)) {
+        throw throwError(400, "userId가 유효하지 않습니다.");
+      }
+
       if (!isValidObjectId(commentId)) {
         throw throwError(400, "commentId가 유효하지 않습니다.");
       }
 
-      if (!isValidObjectId(postId)) {
-        throw throwError(400, "postId가 유효하지 않습니다.");
-      }
+      const comment = await this.comment.findById(commentId);
 
       await Promise.all([
         this.user.findByIdAndUpdate(userId, {
           $pull: { writeComments: commentId },
         }),
-        this.coment.findByIdAndDelete(commentId),
-        this.post.findByIdAndUpdate(postId, { $inc: { commentCount: -1 } }),
+        this.comment.findByIdAndDelete(commentId),
+        this.post.findByIdAndUpdate(comment.postId, {
+          $inc: { commentCount: -1 },
+        }),
+        this.parentComment.findByIdAndUpdate(comment.parentId, {
+          $inc: { commentCount: -1 },
+        }),
       ]);
     } catch (error) {
       console.error(error);
