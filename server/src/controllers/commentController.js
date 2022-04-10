@@ -138,8 +138,21 @@ export const blockComment = async (req, res, next) => {
   }
 };
 
-export const deleteParentComment = async (req, res, next) => {
+export const deleteParentReviewComment = async (req, res, next) => {
   try {
+    const { id: commentId } = req.params;
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
+export const deleteParentPostComment = async (req, res, next) => {
+  try {
+    const { id: commentId } = req.params;
+    await commentServiceInstance.deleteParentPostComment(req.id, commentId);
+
+    return res.status(200).json({ message: "success" });
   } catch (error) {
     console.error(error);
     next(error);

@@ -11,7 +11,8 @@ import {
   createPostParentComment,
   updateComment,
   blockComment,
-  deleteParentComment,
+  deleteParentReviewComment,
+  deleteParentPostComment,
   deleteReviewComment,
   deletePostComment,
 } from "../controllers/commentController";
@@ -36,7 +37,9 @@ commentRouter.patch("/:id", authJWT, updateComment);
 
 commentRouter.patch("/:id/block", authJWT, blockComment);
 
-commentRouter.put("/:id/parent", authJWT, deleteParentComment);
+commentRouter.put("/:id/review/parent", authJWT, deleteParentReviewComment);
+
+commentRouter.put("/:id/post/parent", authJWT, deleteParentPostComment);
 
 commentRouter.delete("/:id/review", authJWT, deleteReviewComment);
 

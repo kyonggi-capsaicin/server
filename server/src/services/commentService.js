@@ -20,6 +20,73 @@ export default class commentService {
     this.parentComment = ParentComment;
   }
 
+  async getAllPostComments(postId, page) {
+    try {
+      if (!isValidObjectId(postId)) {
+        throw throwError(400, "postId가 유효하지 않습니다.");
+      }
+
+      const comments = await this.coment
+        .find({ postId }, { __v: 0 })
+        .sort({ _id: -1 })
+        .skip(page * 10)
+        .limit(10);
+
+      return comments;
+    } catch (error) {
+      console.error(error);
+      throw serviceError(error);
+    }
+  }
+
+  async getComment(commentId) {
+    try {
+      if (!isValidObjectId(commentId)) {
+        throw throwError(400, "commentId가 유효하지 않습니다.");
+      }
+
+      const comment = await this.coment.findById(commentId, { __v: 0 });
+      return comment;
+    } catch (error) {
+      console.error(error);
+      throw serviceError(error);
+    }
+  }
+
+  async createPostParentComment(userId, postId, commentDTO) {
+    try {
+      if (!isValidObjectId(userId)) {
+        throw throwError(400, "userId가 유효하지 않습니다.");
+      }
+
+      if (!isValidObjectId(postId)) {
+        throw throwError(400, "postId가 유효하지 않습니다.");
+      }
+
+      const user = await this.user.findById(userId);
+
+      commentDTO.createAt = seoulDate;
+      commentDTO.updateAt = seoulDate;
+      commentDTO.postId = postId;
+      commentDTO.writer = user;
+
+      const comment = new this.parentComment(commentDTO);
+
+      const [newComment] = await Promise.all([
+        comment.save(),
+        this.user.findByIdAndUpdate(userId, {
+          $push: { writeComments: { $each: [comment.id], $position: 0 } },
+        }),
+        this.post.findByIdAndUpdate(postId, { $inc: { commentCount: 1 } }),
+      ]);
+
+      return newComment;
+    } catch (error) {
+      console.error(error);
+      throw serviceError(error);
+    }
+  }
+
   async createPostComment(userId, postId, parentId, commentDTO) {
     try {
       if (!isValidObjectId(userId)) {
@@ -93,73 +160,6 @@ export default class commentService {
     }
   }
 
-  async createPostParentComment(userId, postId, commentDTO) {
-    try {
-      if (!isValidObjectId(userId)) {
-        throw throwError(400, "userId가 유효하지 않습니다.");
-      }
-
-      if (!isValidObjectId(postId)) {
-        throw throwError(400, "postId가 유효하지 않습니다.");
-      }
-
-      const user = await this.user.findById(userId);
-
-      commentDTO.createAt = seoulDate;
-      commentDTO.updateAt = seoulDate;
-      commentDTO.postId = postId;
-      commentDTO.writer = user;
-
-      const comment = new this.parentComment(commentDTO);
-
-      const [newComment] = await Promise.all([
-        comment.save(),
-        this.user.findByIdAndUpdate(userId, {
-          $push: { writeComments: { $each: [comment.id], $position: 0 } },
-        }),
-        this.post.findByIdAndUpdate(postId, { $inc: { commentCount: 1 } }),
-      ]);
-
-      return newComment;
-    } catch (error) {
-      console.error(error);
-      throw serviceError(error);
-    }
-  }
-
-  async getAllPostComments(postId, page) {
-    try {
-      if (!isValidObjectId(postId)) {
-        throw throwError(400, "postId가 유효하지 않습니다.");
-      }
-
-      const comments = await this.coment
-        .find({ postId }, { __v: 0 })
-        .sort({ _id: -1 })
-        .skip(page * 10)
-        .limit(10);
-
-      return comments;
-    } catch (error) {
-      console.error(error);
-      throw serviceError(error);
-    }
-  }
-
-  async getComment(commentId) {
-    try {
-      if (!isValidObjectId(commentId)) {
-        throw throwError(400, "commentId가 유효하지 않습니다.");
-      }
-
-      const comment = await this.coment.findById(commentId, { __v: 0 });
-      return comment;
-    } catch (error) {
-      console.error(error);
-      throw serviceError(error);
-    }
-  }
-
   async updateComment(commentId, updateCommentDTO) {
     try {
       if (!isValidObjectId(commentId)) {
@@ -174,6 +174,45 @@ export default class commentService {
         { new: true, projection: { __v: 0 } }
       );
       return updatedComment;
+    } catch (error) {
+      console.error(error);
+      throw serviceError(error);
+    }
+  }
+
+  async deleteParentPostComment(userId, commentId) {
+    try {
+      if (!isValidObjectId(userId)) {
+        throw throwError(400, "userId가 유효하지 않습니다.");
+      }
+
+      if (!isValidObjectId(commentId)) {
+        throw throwError(400, "commentId가 유효하지 않습니다.");
+      }
+
+      const comment = await this.parentComment.findById(commentId);
+
+      if (comment.commentCount > 0) {
+        await Promise.all([
+          this.post.findByIdAndUpdate(comment.postId, {
+            $inc: { commentCount: -1 },
+          }),
+          this.parentComment.findByIdAndUpdate(commentId, { isDeleted: true }),
+          this.user.findByIdAndUpdate(userId, {
+            $pull: { writeComments: commentId },
+          }),
+        ]);
+      } else {
+        await Promise.all([
+          this.post.findByIdAndUpdate(comment.postId, {
+            $inc: { commentCount: -1 },
+          }),
+          this.parentComment.findByIdAndDelete(commentId),
+          this.user.findByIdAndUpdate(userId, {
+            $pull: { writeComments: commentId },
+          }),
+        ]);
+      }
     } catch (error) {
       console.error(error);
       throw serviceError(error);

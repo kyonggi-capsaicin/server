@@ -39,6 +39,13 @@ export const parentCommentSchema = new mongoose.Schema({
     default: 0,
   },
 
+  // 대댓글이 있는 부모 댓글을 삭제 할 경우 true로 설정
+  // isDeleted가 true라면 삭제된 댓글로 ui 구현
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
+
   // 신고 수
   blockNumber: {
     type: Number,
