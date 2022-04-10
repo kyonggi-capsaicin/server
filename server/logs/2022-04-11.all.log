@@ -1,0 +1,32 @@
+2022-04-11 00:01:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-11 00:03:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-11 00:03:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-11 00:07:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-11 00:07:01 [백엔드 맛보기] error: verify error jwt expired
+2022-04-11 00:07:01 [백엔드 맛보기] info: GET /refresh 200 Response: "success: true"
+2022-04-11 00:08:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-11 00:10:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-11 00:10:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-11 00:11:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-11 00:11:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-11 00:14:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-11 00:15:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-11 00:16:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-11 00:16:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-11 00:16:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-11 00:17:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-11 00:18:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-11 00:18:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-11 00:19:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-11 00:19:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-11 00:20:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-11 00:22:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-11 00:22:01 [백엔드 맛보기] error: verify error jwt expired
+2022-04-11 00:22:01 [백엔드 맛보기] info: GET /refresh 200 Response: "success: true"
+2022-04-11 00:23:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-11 00:25:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-11 00:25:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-11 00:26:01 [백엔드 맛보기] error: verify error jwt expired
+2022-04-11 00:27:01 [백엔드 맛보기] info: Server listening on 4000
+2022-04-11 00:28:01 [백엔드 맛보기] error: verify error jwt malformed
+2022-04-11 00:30:01 [백엔드 맛보기] info: Server listening on 4000
