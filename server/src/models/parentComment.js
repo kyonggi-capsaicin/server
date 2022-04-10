@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export const commentSchema = new mongoose.Schema({
+export const parentCommentSchema = new mongoose.Schema({
   writer: {
     _id: {
       type: mongoose.SchemaTypes.ObjectId,
@@ -33,10 +33,10 @@ export const commentSchema = new mongoose.Schema({
     required: true,
   },
 
-  // 어떤 댓글의 대댓글인지
-  parentId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Comment",
+  // 소속 대댓글 수
+  commentCount: {
+    type: Number,
+    default: 0,
   },
 
   // 신고 수
@@ -56,6 +56,6 @@ export const commentSchema = new mongoose.Schema({
   },
 });
 
-const Comment = mongoose.model("Comment", commentSchema);
+const ParentComment = mongoose.model("ParentComment", parentCommentSchema);
 
-export default Comment;
+export default ParentComment;

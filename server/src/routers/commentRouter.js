@@ -7,11 +7,13 @@ import {
   getComment,
   createReviewComment,
   createPostComment,
+  createReviewParentComment,
+  createPostParentComment,
   updateComment,
   blockComment,
   deleteParentComment,
   deleteReviewComment,
-  deletePostComment
+  deletePostComment,
 } from "../controllers/commentController";
 
 const commentRouter = express.Router();
@@ -25,6 +27,10 @@ commentRouter.get("/:id", getComment);
 commentRouter.post("/review", authJWT, createReviewComment);
 
 commentRouter.post("/post", authJWT, createPostComment);
+
+commentRouter.post("/review/parent", authJWT, createReviewParentComment);
+
+commentRouter.post("/post/parent", authJWT, createPostParentComment);
 
 commentRouter.patch("/:id", authJWT, updateComment);
 

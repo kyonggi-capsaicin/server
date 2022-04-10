@@ -41,9 +41,43 @@ export const getComment = async (req, res, next) => {
   }
 };
 
+export const createReviewParentComment = async (req, res, next) => {
+  try {
+    const { postId } = req.body;
+
+    const comment = await commentServiceInstance.createPostComment(
+      req.id,
+      postId,
+      req.body
+    );
+
+    return res.status(200).json({ message: "success", data: comment });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
+export const createPostParentComment = async (req, res, next) => {
+  try {
+    const { postId } = req.body;
+
+    const comment = await commentServiceInstance.createPostParentComment(
+      req.id,
+      postId,
+      req.body
+    );
+
+    return res.status(200).json({ message: "success", data: comment });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
 export const createReviewComment = async (req, res, next) => {
   try {
-    const { reviewId } = req.body;
+    const { reviewId, parentId } = req.body;
 
     const comment = await commentServiceInstance.createReviewComment(
       req.id,
@@ -60,11 +94,12 @@ export const createReviewComment = async (req, res, next) => {
 
 export const createPostComment = async (req, res, next) => {
   try {
-    const { postId } = req.body;
+    const { postId, parentId } = req.body;
 
     const comment = await commentServiceInstance.createPostComment(
       req.id,
       postId,
+      parentId,
       req.body
     );
 

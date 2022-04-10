@@ -1,6 +1,7 @@
 import { Service } from "typedi";
 import { isValidObjectId } from "mongoose";
 import User from "../models/users";
+import ParentComment from "../models/parentComment";
 import Comment from "../models/comments";
 import Review from "../models/reviews";
 import Post from "../models/posts";
@@ -13,9 +14,52 @@ import logger from "../config/logger";
 export default class commentService {
   constructor() {
     this.user = User;
-    this.coment = Comment;
+    this.comment = Comment;
     this.post = Post;
     this.review = Review;
+    this.parentComment = ParentComment;
+  }
+
+  async createPostComment(userId, postId, parentId, commentDTO) {
+    try {
+      if (!isValidObjectId(userId)) {
+        throw throwError(400, "userId가 유효하지 않습니다.");
+      }
+
+      if (!isValidObjectId(postId)) {
+        throw throwError(400, "postId가 유효하지 않습니다.");
+      }
+
+      if (!isValidObjectId(parentId)) {
+        throw throwError(400, "parentId가 유효하지 않습니다.");
+      }
+
+      const user = await this.user.findById(userId);
+
+      commentDTO.createAt = seoulDate;
+      commentDTO.updateAt = seoulDate;
+      commentDTO.postId = postId;
+      commentDTO.parentId = parentId;
+      commentDTO.writer = user;
+
+      const comment = new this.comment(commentDTO);
+
+      const [newComment] = await Promise.all([
+        comment.save(),
+        this.parentComment.findByIdAndUpdate(parentId, {
+          $inc: { commentCount: 1 },
+        }),
+        this.user.findByIdAndUpdate(userId, {
+          $push: { writeComments: { $each: [comment.id], $position: 0 } },
+        }),
+        this.post.findByIdAndUpdate(postId, { $inc: { commentCount: 1 } }),
+      ]);
+
+      return newComment;
+    } catch (error) {
+      console.error(error);
+      throw serviceError(error);
+    }
   }
 
   async createReviewComment(userId, reviewId, commentDTO) {
@@ -49,7 +93,7 @@ export default class commentService {
     }
   }
 
-  async createPostComment(userId, postId, commentDTO) {
+  async createPostParentComment(userId, postId, commentDTO) {
     try {
       if (!isValidObjectId(userId)) {
         throw throwError(400, "userId가 유효하지 않습니다.");
@@ -66,7 +110,7 @@ export default class commentService {
       commentDTO.postId = postId;
       commentDTO.writer = user;
 
-      const comment = new this.coment(commentDTO);
+      const comment = new this.parentComment(commentDTO);
 
       const [newComment] = await Promise.all([
         comment.save(),
