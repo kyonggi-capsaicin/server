@@ -2,7 +2,6 @@ import { Service } from "typedi";
 import Post from "../models/posts";
 import User from "../models/users";
 import Comment from "../models/comments";
-import ParentComment from "../models/parentComment";
 import throwError from "../utils/throwError";
 import serviceError from "../utils/serviceError";
 import { isValidObjectId } from "mongoose";
@@ -15,7 +14,6 @@ export default class postService {
     this.post = Post;
     this.user = User;
     this.comment = Comment;
-    this.parentComment = ParentComment;
   }
 
   async getAllPosts(page) {
@@ -56,8 +54,8 @@ export default class postService {
       const user = await this.user.findById(userId);
 
       postDTO.writer = user;
-      postDTO.createAt = seoulDate;
-      postDTO.updateAt = seoulDate;
+      postDTO.createAt = seoulDate();
+      postDTO.updateAt = seoulDate();
 
       const newPost = new this.post(postDTO);
 
@@ -83,7 +81,7 @@ export default class postService {
         throw throwError(400, "userId가 유효하지 않습니다.");
       }
 
-      updateDTO.updateAt = seoulDate;
+      updateDTO.updateAt = seoulDate();
 
       const updatedPost = await this.post.findByIdAndUpdate(postId, updateDTO, {
         new: true,
@@ -125,22 +123,15 @@ export default class postService {
         throw throwError(400, "postId가 유효하지 않습니다.");
       }
 
-      const [comments, parentComments] = await Promise.all([
-        this.comment.find({ postId }),
-        this.parentComment.find({ postId }),
-      ]);
+      const [comments] = await Promise.all([this.comment.find({ postId })]);
 
-      let commentIdArr = comments.map((comment) => comment._id);
-      parentComments.forEach((parentComment) => {
-        commentIdArr.push(parentComment._id);
-      });
+      const commentIdArr = comments.map((comment) => comment._id);
 
       await Promise.all([
         this.user.findByIdAndUpdate(userId, {
           $pull: { writePosts: postId, writeComments: { $in: commentIdArr } },
         }),
         this.comment.deleteMany({ postId }),
-        this.parentComment.deleteMany({ postId }),
       ]);
     } catch (error) {
       console.error(error);
