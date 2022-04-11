@@ -13,7 +13,7 @@ import {
 const reviewRouter = express.Router();
 
 // 모든 감사의 편지 가져오기
-reviewRouter.get("/", getAllReviews);
+reviewRouter.get("/:id", getAllReviews);
 
 // 감사의 편지 작성하기
 reviewRouter.post("/", authJWT, upload.single("image"), createReview);

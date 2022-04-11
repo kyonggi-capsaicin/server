@@ -13,6 +13,8 @@ export default (app) => {
   app.use(express.json());
   app.use(morgan("dev"));
 
+  app.use("/img", express.static("uploads"));
+
   app.use("/api/data", dataRouter);
   app.use("/api/posts", postRouter);
   app.use("/api/auth", authRouter);

@@ -7,10 +7,11 @@ const reviewServiceInstance = Container.get(reviewService);
 
 export const getAllReviews = async (req, res, next) => {
   try {
+    const { id: sunhanId } = req.params;
     let { page } = req.query;
     page = page ? page : 0;
 
-    const posts = await postServiceInstance.getAllPosts(page);
+    const posts = await reviewServiceInstance.getAllReviews(sunhanId, page);
     return res.status(200).json({ message: "success", data: posts });
   } catch (error) {
     console.error(error);
@@ -39,9 +40,19 @@ export const createReview = async (req, res, next) => {
 
 export const updateReview = async (req, res, next) => {
   try {
-    const { id: postId } = req.params;
+    let filename = null;
+    if (req.file) {
+      filename = req.file.filename;
+    }
 
-    const post = await postServiceInstance.updatePost(postId, req.body);
+    const { id: reviewId } = req.params;
+
+    const post = await reviewServiceInstance.updateReview(
+      reviewId,
+      req.body,
+      filename
+    );
+
     return res.status(200).json({ message: "success", data: post });
   } catch (error) {
     next(error);

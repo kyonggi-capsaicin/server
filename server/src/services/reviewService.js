@@ -14,15 +14,19 @@ export default class reviewService {
     this.user = User;
   }
 
-  async getAllPosts(page) {
+  async getAllReviews(sunhanId, page) {
     try {
-      const posts = await this.post
-        .find({}, { __v: 0 })
+      if (!isValidObjectId(sunhanId)) {
+        throw throwError(400, "sunhanId가 유효하지 않습니다.");
+      }
+
+      const reviews = await this.review
+        .find({ sunhanId }, { __v: 0 })
         .sort({ _id: -1 })
         .skip(page * 10)
         .limit(10);
 
-      return posts;
+      return reviews;
     } catch (error) {
       console.error(error.message);
       throw serviceError(error);
@@ -75,20 +79,31 @@ export default class reviewService {
     }
   }
 
-  async updatePost(postId, updateDTO) {
+  async updateReview(reviewId, updateDTO, imageUrl) {
     try {
-      if (!isValidObjectId(postId)) {
+      if (!isValidObjectId(reviewId)) {
         throw throwError(400, "userId가 유효하지 않습니다.");
+      }
+
+      if (!imageUrl) {
+        const review = await this.review.findById(reviewId);
+        updateDTO.imageUrl = review.imageUrl;
+      } else {
+        updateDTO.imageUrl = imageUrl;
       }
 
       updateDTO.updateAt = seoulDate();
 
-      const updatedPost = await this.post.findByIdAndUpdate(postId, updateDTO, {
-        new: true,
-        projection: { __v: 0 },
-      });
+      const updatedReview = await this.review.findByIdAndUpdate(
+        reviewId,
+        updateDTO,
+        {
+          new: true,
+          projection: { __v: 0 },
+        }
+      );
 
-      return updatedPost;
+      return updatedReview;
     } catch (error) {
       console.error(error);
       throw serviceError(error);
