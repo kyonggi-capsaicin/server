@@ -4,23 +4,19 @@ console.log("client code running.");
 
 const URI = "http://localhost:4000";
 
+// 선한영향력 가게 => 240ms (nesting 전)
+// 선한영향력 가게 => 120ms (nesting 후)
+
 const test = async () => {
   console.time("loading time: ");
 
   try {
-    await axios.post(
-      `${URI}/api/comments/post`,
-      {
-        content: "첫 댓글",
-        postId: "624d6030b60eae5f79cbe3ef",
+    await axios.get(`${URI}/api/sunhans/624ed5bf8b6bb24b83b3b134`, {
+      headers: {
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNGQ2MDcyYjYwZWFlNWY3OWNiZTNmMyIsIm5pY2tuYW1lIjoi7ISg7ZWcNDc2MyIsImlhdCI6MTY0OTUwNzE0MiwiZXhwIjoxNjQ5NTA4OTQyfQ.vFaPlJKN8EK7U8BSm6RW21PPizzstYwVs5uUAGYKHCU",
       },
-      {
-        headers: {
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNGQ2MDcyYjYwZWFlNWY3OWNiZTNmMyIsIm5pY2tuYW1lIjoi7ISg7ZWcNDc2MyIsImlhdCI6MTY0OTUwNzE0MiwiZXhwIjoxNjQ5NTA4OTQyfQ.vFaPlJKN8EK7U8BSm6RW21PPizzstYwVs5uUAGYKHCU",
-        },
-      }
-    );
+    });
   } catch (error) {
     console.log(error);
   }

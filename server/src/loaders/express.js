@@ -8,6 +8,7 @@ import authRouter from "../routers/authRouter";
 import scrapRouter from "../routers/scrapRouter";
 import commentRouter from "../routers/commentRouter";
 import reviewRouter from "../routers/reviewRouter";
+import sunhanRouter from "../routers/sunhanRouter";
 
 export default (app) => {
   app.use(express.json());
@@ -21,6 +22,7 @@ export default (app) => {
   app.use("/api/scraps", scrapRouter);
   app.use("/api/comments", commentRouter);
   app.use("/api/reviews", reviewRouter);
+  app.use("/api/sunhans", sunhanRouter);
 
   /// catch 404 and forward to error handler
   app.use((req, res, next) => {

@@ -46,6 +46,7 @@ export const naverLogin = async (req, res, next) => {
     const refreshToken = refresh();
 
     await redisClient.set(user.id, refreshToken);
+
     res
       .status(200)
       .json({ success: true, data: { accessToken, refreshToken } });

@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { reviewSchema } from "./reviews";
 
 const sunhanSchema = new mongoose.Schema({
   // 가맹점명
@@ -55,6 +56,8 @@ const sunhanSchema = new mongoose.Schema({
   detailCategory: {
     type: String,
   },
+
+  reviews: [reviewSchema],
 });
 
 const Sunhan = mongoose.model("Sunhan", sunhanSchema);

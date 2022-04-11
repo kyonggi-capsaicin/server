@@ -9,7 +9,7 @@ export const getScraps = async (req, res, next) => {
 
     type = type ? type : "sunhan";
     const scraps = await scrapServiceInstance.getScraps(req.id, type);
-    return res.status(200).json({ message: "success", scraps });
+    return res.status(200).json({ message: "success", data: scraps });
   } catch (error) {
     console.error(error);
     next(error);

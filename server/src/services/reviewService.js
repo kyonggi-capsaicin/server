@@ -1,6 +1,7 @@
 import { Service } from "typedi";
 import Review from "../models/reviews";
 import User from "../models/users";
+import Sunhan from "../models/sunhanShop";
 import throwError from "../utils/throwError";
 import serviceError from "../utils/serviceError";
 import { isValidObjectId } from "mongoose";
@@ -12,6 +13,7 @@ export default class reviewService {
   constructor() {
     this.review = Review;
     this.user = User;
+    this.sunhan = Sunhan;
   }
 
   async getAllReviews(sunhanId, page) {
@@ -69,6 +71,9 @@ export default class reviewService {
         newReview.save(),
         this.user.findByIdAndUpdate(userId, {
           $push: { writeReviews: { $each: [newReview.id], $position: 0 } },
+        }),
+        this.sunhan.findByIdAndUpdate(reviewDTO.sunhanId, {
+          $push: { reviews: { $each: [newReview], $slice: -10 } },
         }),
       ]);
 
