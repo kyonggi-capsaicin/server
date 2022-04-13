@@ -13,8 +13,8 @@ const userSchema = new mongoose.Schema({
   },
 
   address: {
-    type: String,
-    required: false,
+    lat: { type: Number },
+    lng: { type: Number },
   },
 
   email: {

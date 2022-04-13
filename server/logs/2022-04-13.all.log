@@ -22,3 +22,15 @@
 2022-04-13 17:29:03 [백엔드 맛보기] info: Server listening on 4000
 2022-04-13 17:29:03 [백엔드 맛보기] info: Server listening on 4000
 2022-04-13 17:30:03 [백엔드 맛보기] info: Server listening on 4000
+2022-04-13 17:34:03 [백엔드 맛보기] info: Server listening on 4000
+2022-04-13 17:57:03 [백엔드 맛보기] info: Server listening on 4000
+2022-04-13 17:57:03 [백엔드 맛보기] info: Server listening on 4000
+2022-04-13 17:58:03 [백엔드 맛보기] info: Server listening on 4000
+2022-04-13 17:58:03 [백엔드 맛보기] info: Server listening on 4000
+2022-04-13 17:58:03 [백엔드 맛보기] info: Server listening on 4000
+2022-04-13 17:59:03 [백엔드 맛보기] info: Server listening on 4000
+2022-04-13 18:03:03 [백엔드 맛보기] info: Server listening on 4000
+2022-04-13 18:03:03 [백엔드 맛보기] info: Server listening on 4000
+2022-04-13 18:03:03 [백엔드 맛보기] error: verify error jwt expired
+2022-04-13 18:03:03 [백엔드 맛보기] error: verify error jwt expired
+2022-04-13 18:03:03 [백엔드 맛보기] info: GET /refresh 200 Response: "success: true"

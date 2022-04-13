@@ -16,7 +16,8 @@ export const getUser = async (req, res, next) => {
 
 export const setAddressInfo = async (req, res, next) => {
   try {
-    let { type } = req.query;
+    await userServiceInstance.setAddressInfo(req.id, req.body);
+    return res.status(200).json({ message: "success" });
   } catch (error) {
     console.error(error);
     next(error);
