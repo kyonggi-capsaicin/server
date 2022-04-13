@@ -14,3 +14,15 @@ export const getSunhan = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getSunhanMenu = async (req, res, next) => {
+  try {
+    const { id: sunhanId } = req.params;
+
+    const sunhanMenu = await sunhanServiceInstance.getSunhanMenu(sunhanId);
+    return res.status(200).json({ message: "success", data: sunhanMenu });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};

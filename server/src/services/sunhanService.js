@@ -25,4 +25,19 @@ export default class sunhanService {
       throw serviceError(error);
     }
   }
+
+  async getSunhanMenu(sunhanId) {
+    try {
+      if (!isValidObjectId(sunhanId)) {
+        throw throwError(400, "sunhanId가 유효하지 않습니다.");
+      }
+
+      const sunhan = await this.sunhan.findById(sunhanId, { __v: 0 });
+
+      return sunhan;
+    } catch (error) {
+      console.error(error);
+      throw serviceError(error);
+    }
+  }
 }
