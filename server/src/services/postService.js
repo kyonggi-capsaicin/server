@@ -1,4 +1,5 @@
 import { Service } from "typedi";
+import { Types } from "mongoose";
 import Post from "../models/posts";
 import User from "../models/users";
 import Comment from "../models/comments";
@@ -128,9 +129,18 @@ export default class postService {
       const commentIdArr = comments.map((comment) => comment._id);
 
       await Promise.all([
+        // 게시글 삭제
+        this.post.findByIdAndDelete(postId),
+        // 게시글 작성자의 writePosts 삭제
         this.user.findByIdAndUpdate(userId, {
-          $pull: { writePosts: postId, writeComments: { $in: commentIdArr } },
+          $pull: { writePosts: postId },
         }),
+        // 모든 유저를 대상으로 writeComments 삭제
+        this.user.updateMany(
+          {},
+          { $pull: { writeComments: { $in: commentIdArr } } }
+        ),
+        // 모든 댓글 삭제
         this.comment.deleteMany({ postId }),
       ]);
     } catch (error) {

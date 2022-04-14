@@ -16,6 +16,15 @@ const userRouter = express.Router();
 // 유저 정보 가져오기
 userRouter.get("/", authJWT, getUser);
 
+// 유저가 쓴 커뮤니티 게시글 가져오기
+userRouter.get("/", authJWT, getUser);
+
+// 유저가 쓴 리뷰 가져오기
+userRouter.get("/", authJWT, getUser);
+
+// 유저가 쓴 댓글 가져오기
+userRouter.get("/", authJWT, getUser);
+
 // 유저 주소 설정
 userRouter.post("/address", authJWT, setAddressInfo);
 

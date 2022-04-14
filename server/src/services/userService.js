@@ -94,15 +94,20 @@ export default class userService {
     }
   }
 
-  async deleteUser(sunhanId) {
+  async deleteUser(userId) {
     try {
-      if (!isValidObjectId(sunhanId)) {
-        throw throwError(400, "sunhanId가 유효하지 않습니다.");
+      if (!isValidObjectId(userId)) {
+        throw throwError(400, "userId가 유효하지 않습니다.");
       }
 
-      const sunhan = await this.sunhan.findById(sunhanId, { __v: 0 });
+      // todo
+      // 1. 유저 삭제
+      // 2. 유저가 작성한 리뷰 삭제
+      // 3. 유저가 작성한 게시글 삭제
+      // 4. 게시글이 있다면 해당 게시글의 댓글 삭제
+      // 5. 유저가 작성한 댓글 삭제 (부모 댓글, 자식 댓글 구분 필요)
 
-      return sunhan;
+      await this.user.findById(sunhanId, { __v: 0 });
     } catch (error) {
       console.error(error);
       throw serviceError(error);

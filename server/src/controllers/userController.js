@@ -64,7 +64,8 @@ export const unblockUser = async (req, res, next) => {
 
 export const deleteUser = async (req, res, next) => {
   try {
-    let { type } = req.query;
+    await userServiceInstance.deleteUser(req.id);
+    return res.status(200).json({ message: "success" });
   } catch (error) {
     console.error(error);
     next(error);

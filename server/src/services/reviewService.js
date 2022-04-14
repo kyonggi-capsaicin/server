@@ -2,6 +2,7 @@ import { Service } from "typedi";
 import Review from "../models/reviews";
 import User from "../models/users";
 import Sunhan from "../models/sunhanShop";
+import Post from "../models/posts";
 import throwError from "../utils/throwError";
 import serviceError from "../utils/serviceError";
 import { isValidObjectId } from "mongoose";
@@ -14,6 +15,7 @@ export default class reviewService {
     this.review = Review;
     this.user = User;
     this.sunhan = Sunhan;
+    this.post = Post;
   }
 
   async getAllReviews(sunhanId, page) {
@@ -151,7 +153,8 @@ export default class reviewService {
         this.user.findByIdAndUpdate(userId, {
           $pull: { writePosts: postId, writeComments: { $in: commentIdArr } },
         }),
-        this.comment.deleteMany({ postId }),
+        this.post.findByIdAndDelete(postId),
+        this.this.comment.deleteMany({ postId }),
       ]);
     } catch (error) {
       console.error(error);

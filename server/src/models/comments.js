@@ -43,6 +43,14 @@ export const commentSchema = new mongoose.Schema({
   // isDeleted가 true라면 삭제된 댓글로 ui 구현
   isDeleted: {
     type: Boolean,
+    default: false,
+  },
+
+  // 내가 작성하지 않은 커뮤니티 게시글이 삭제 될 경우
+  // true로 변경하여 댓글을 불러올 때 삭제된 게시글이라고 알려주기
+  isDeletedPost: {
+    type: Boolean,
+    default: false,
   },
 
   // 소속 대댓글 수
