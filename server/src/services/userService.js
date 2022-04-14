@@ -1,5 +1,9 @@
 import { Service } from "typedi";
 import User from "../models/users";
+import Review from "../models/reviews";
+import Post from "../models/posts";
+import Sunhan from "../models/sunhanShop";
+import Comment from "../models/comments";
 import throwError from "../utils/throwError";
 import serviceError from "../utils/serviceError";
 import { isValidObjectId } from "mongoose";
@@ -8,6 +12,10 @@ import { isValidObjectId } from "mongoose";
 export default class userService {
   constructor() {
     this.user = User;
+    this.review = Review;
+    this.post = Post;
+    this.comment = Comment;
+    this.sunhan = Sunhan;
   }
 
   async getUser(userId) {
@@ -45,9 +53,130 @@ export default class userService {
 
       if (avatarUrl) {
         updateUserDTO.avatarUrl = avatarUrl;
-      }
 
-      await this.user.findByIdAndUpdate(userId, updateUserDTO);
+        // avatarUrl, nickname 모두 변경하는 경우
+        if (updateUserDTO.nickname) {
+          await Promise.all([
+            this.user.findByIdAndUpdate(userId, updateUserDTO),
+            this.sunhan.updateMany(
+              {},
+              {
+                $set: {
+                  "reviews.$[element].writer.avatarUrl": avatarUrl,
+                  "reviews.$[element].writer.nickname": updateUserDTO.nickname,
+                },
+              },
+              { arrayFilters: [{ "element.writer._id": userId }] }
+            ),
+            this.comment.updateMany(
+              { "writer._id": userId },
+              {
+                $set: {
+                  "writer.avatarUrl": avatarUrl,
+                  "writer.nickname": updateUserDTO.nickname,
+                },
+              }
+            ),
+            this.post.updateMany(
+              { "writer._id": userId },
+              {
+                $set: {
+                  "writer.avatarUrl": avatarUrl,
+                  "writer.nickname": updateUserDTO.nickname,
+                },
+              }
+            ),
+            this.review.updateMany(
+              { "writer._id": userId },
+              {
+                $set: {
+                  "writer.avatarUrl": avatarUrl,
+                  "writer.nickname": updateUserDTO.nickname,
+                },
+              }
+            ),
+          ]);
+          return;
+        }
+
+        // avatarUrl 변경하는 경우
+        await Promise.all([
+          this.user.findByIdAndUpdate(userId, updateUserDTO),
+          this.sunhan.updateMany(
+            {},
+            {
+              $set: {
+                "reviews.$[element].writer.avatarUrl": avatarUrl,
+              },
+            },
+            { arrayFilters: [{ "element.writer._id": userId }] }
+          ),
+          this.comment.updateMany(
+            { "writer._id": userId },
+            {
+              $set: {
+                "writer.avatarUrl": avatarUrl,
+              },
+            }
+          ),
+          this.post.updateMany(
+            { "writer._id": userId },
+            {
+              $set: {
+                "writer.avatarUrl": avatarUrl,
+              },
+            }
+          ),
+          this.review.updateMany(
+            { "writer._id": userId },
+            {
+              $set: {
+                "writer.avatarUrl": avatarUrl,
+              },
+            }
+          ),
+        ]);
+        return;
+      }
+      // nickname만 변경하는 경우
+      else {
+        await Promise.all([
+          this.user.findByIdAndUpdate(userId, updateUserDTO),
+          this.sunhan.updateMany(
+            {},
+            {
+              $set: {
+                "reviews.$[element].writer.nickname": updateUserDTO.nickname,
+              },
+            },
+            { arrayFilters: [{ "element.writer._id": userId }] }
+          ),
+          this.comment.updateMany(
+            { "writer._id": userId },
+            {
+              $set: {
+                "writer.nickname": updateUserDTO.nickname,
+              },
+            }
+          ),
+          this.post.updateMany(
+            { "writer._id": userId },
+            {
+              $set: {
+                "writer.nickname": updateUserDTO.nickname,
+              },
+            }
+          ),
+          this.review.updateMany(
+            { "writer._id": userId },
+            {
+              $set: {
+                "writer.nickname": updateUserDTO.nickname,
+              },
+            }
+          ),
+        ]);
+      }
     } catch (error) {
       console.error(error);
       throw serviceError(error);
@@ -100,14 +229,36 @@ export default class userService {
         throw throwError(400, "userId가 유효하지 않습니다.");
       }
 
-      // todo
-      // 1. 유저 삭제
-      // 2. 유저가 작성한 리뷰 삭제
-      // 3. 유저가 작성한 게시글 삭제
-      // 4. 게시글이 있다면 해당 게시글의 댓글 삭제
-      // 5. 유저가 작성한 댓글 삭제 (부모 댓글, 자식 댓글 구분 필요)
-
-      await this.user.findById(sunhanId, { __v: 0 });
+      await Promise.all([
+        this.user.findByIdAndDelete(userId),
+        this.review.updateMany(
+          { "writer._id": userId },
+          {
+            $set: {
+              "writer.nickname": "탈퇴 회원",
+              "writer.avatarUrl": "902e5693-e0bb-4097-8ab5-b81a71003fe4.jpg",
+            },
+          }
+        ),
+        this.post.updateMany(
+          { "writer._id": userId },
+          {
+            $set: {
+              "writer.nickname": "탈퇴 회원",
+              "writer.avatarUrl": "902e5693-e0bb-4097-8ab5-b81a71003fe4.jpg",
+            },
+          }
+        ),
+        this.comment.updateMany(
+          { "writer._id": userId },
+          {
+            $set: {
+              "writer.nickname": "탈퇴 회원",
+              "writer.avatarUrl": "902e5693-e0bb-4097-8ab5-b81a71003fe4.jpg",
+            },
+          }
+        ),
+      ]);
     } catch (error) {
       console.error(error);
       throw serviceError(error);
