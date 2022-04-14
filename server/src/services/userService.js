@@ -54,30 +54,40 @@ export default class userService {
     }
   }
 
-  async blockUser(sunhanId) {
+  async blockUser(userId, blockUserId) {
     try {
-      if (!isValidObjectId(sunhanId)) {
-        throw throwError(400, "sunhanId가 유효하지 않습니다.");
+      if (!isValidObjectId(userId)) {
+        throw throwError(400, "userId가 유효하지 않습니다.");
       }
 
-      const sunhan = await this.sunhan.findById(sunhanId, { __v: 0 });
+      if (!isValidObjectId(blockUserId)) {
+        throw throwError(400, "blockUserId가 유효하지 않습니다.");
+      }
 
-      return sunhan;
+      const blockUser = await this.user.findById(blockUserId);
+
+      await this.user.findByIdAndUpdate(userId, {
+        $addToSet: { blockUsers: blockUser },
+      });
     } catch (error) {
       console.error(error);
       throw serviceError(error);
     }
   }
 
-  async unblockUser(sunhanId) {
+  async unblockUser(userId, blockUserId) {
     try {
-      if (!isValidObjectId(sunhanId)) {
-        throw throwError(400, "sunhanId가 유효하지 않습니다.");
+      if (!isValidObjectId(userId)) {
+        throw throwError(400, "userId가 유효하지 않습니다.");
       }
 
-      const sunhan = await this.sunhan.findById(sunhanId, { __v: 0 });
+      if (!isValidObjectId(blockUserId)) {
+        throw throwError(400, "blockUserId가 유효하지 않습니다.");
+      }
 
-      return sunhan;
+      await this.user.findByIdAndUpdate(userId, {
+        $pull: { blockUsers: { _id: blockUserId } },
+      });
     } catch (error) {
       console.error(error);
       throw serviceError(error);

@@ -10,7 +10,7 @@ const printFormat = printf(({ timestamp, label, level, message }) => {
 const printLogFormat = {
   file: combine(
     label({
-      label: "백엔드 맛보기",
+      label: "sunhan",
     }),
     timestamp({
       format: "YYYY-MM-DD HH:mm:dd",

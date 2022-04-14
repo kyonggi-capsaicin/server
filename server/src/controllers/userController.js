@@ -41,7 +41,10 @@ export const updateUser = async (req, res, next) => {
 
 export const blockUser = async (req, res, next) => {
   try {
-    let { type } = req.query;
+    const { id: blockUserId } = req.params;
+
+    await userServiceInstance.blockUser(req.id, blockUserId);
+    return res.status(200).json({ message: "success" });
   } catch (error) {
     console.error(error);
     next(error);
@@ -50,7 +53,9 @@ export const blockUser = async (req, res, next) => {
 
 export const unblockUser = async (req, res, next) => {
   try {
-    let { type } = req.query;
+    const { id: blockUserId } = req.params;
+    await userServiceInstance.unblockUser(req.id, blockUserId);
+    return res.status(200).json({ message: "success" });
   } catch (error) {
     console.error(error);
     next(error);
