@@ -72,7 +72,7 @@ export const blockReview = async (req, res, next) => {
 
 export const deleteReview = async (req, res, next) => {
   try {
-    const { id: postId } = req.params;
+    const { id: reviewId } = req.params;
 
     await postServiceInstance.deletePost(req.id, postId);
     return res.status(200).json({ message: "success" });

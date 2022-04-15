@@ -3,6 +3,7 @@ import axios from "axios";
 import request from "../core";
 import Child from "../models/childCardShop";
 import Sunhan from "../models/sunhanShop";
+import serviceError from "../utils/serviceError";
 
 axios.defaults.timeout = 60000;
 
@@ -50,6 +51,10 @@ export default class dataService {
             offer: COT_VALUE_02,
             lng: COT_COORD_X,
             lat: COT_COORD_Y,
+            location: {
+              type: "Point",
+              coordinates: [COT_COORD_X, COT_COORD_Y],
+            },
             phoneNumber: COT_TEL_NO,
             image: COT_IMG_MAIN_URL,
           });

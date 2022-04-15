@@ -37,6 +37,11 @@ const sunhanSchema = new mongoose.Schema({
     type: Number,
   },
 
+  location: {
+    type: { type: String },
+    coordinates: [{ type: Number }],
+  },
+
   // 전화번호
   phoneNumber: {
     type: String,
@@ -59,6 +64,8 @@ const sunhanSchema = new mongoose.Schema({
 
   reviews: [reviewSchema],
 });
+
+sunhanSchema.index({ location: "2dsphere" });
 
 const Sunhan = mongoose.model("Sunhan", sunhanSchema);
 
