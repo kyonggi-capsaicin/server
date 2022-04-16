@@ -128,16 +128,20 @@ export default class reviewService {
     }
   }
 
-  async blockPost(userId, postId) {
+  async blockReview(userId, reviewId) {
     try {
-      if (!isValidObjectId(postId)) {
+      if (!isValidObjectId(userId)) {
         throw throwError(400, "userId가 유효하지 않습니다.");
       }
 
+      if (!isValidObjectId(reviewId)) {
+        throw throwError(400, "reviewId가 유효하지 않습니다.");
+      }
+
       await Promise.all([
-        this.post.findByIdAndUpdate(postId, { $inc: { blockNumber: 1 } }),
+        this.review.findByIdAndUpdate(reviewId, { $inc: { blockNumber: 1 } }),
         this.user.findByIdAndUpdate(userId, {
-          $addToSet: { blockPosts: postId },
+          $addToSet: { blockReviews: reviewId },
         }),
       ]);
     } catch (error) {

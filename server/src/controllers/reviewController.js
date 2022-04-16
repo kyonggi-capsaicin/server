@@ -61,8 +61,8 @@ export const updateReview = async (req, res, next) => {
 
 export const blockReview = async (req, res, next) => {
   try {
-    const { id: postId } = req.params;
-    await postServiceInstance.blockPost(req.id, postId);
+    const { id: reviewId } = req.params;
+    await reviewServiceInstance.blockReview(req.id, reviewId);
 
     return res.status(200).json({ message: "success" });
   } catch (error) {
