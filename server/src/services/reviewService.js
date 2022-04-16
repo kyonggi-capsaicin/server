@@ -101,14 +101,23 @@ export default class reviewService {
 
       updateDTO.updateAt = seoulDate();
 
-      const updatedReview = await this.review.findByIdAndUpdate(
-        reviewId,
-        updateDTO,
-        {
+      const [updatedReview] = await Promise.all([
+        this.review.findByIdAndUpdate(reviewId, updateDTO, {
           new: true,
           projection: { __v: 0 },
-        }
-      );
+        }),
+        this.sunhan.updateMany(
+          {},
+          {
+            $set: {
+              "reviews.$[element].imageUrl": updateDTO.imageUrl,
+              "reviews.$[element].content": updateDTO.content,
+              "reviews.$[element].updateAt": updateDTO.updateAt,
+            },
+          },
+          { arrayFilters: [{ "element._id": reviewId }] }
+        ),
+      ]);
 
       return updatedReview;
     } catch (error) {
