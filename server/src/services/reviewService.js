@@ -1,4 +1,5 @@
-import { Service } from "typedi";
+import { Service, Container } from "typedi";
+import sunhanService from "./sunhanService";
 import Review from "../models/reviews";
 import User from "../models/users";
 import Sunhan from "../models/sunhanShop";
@@ -9,6 +10,7 @@ import { isValidObjectId } from "mongoose";
 import seoulDate from "../utils/seoulDate";
 import logger from "../config/logger";
 
+const sunhanServiceInstance = Container.get(sunhanService);
 @Service()
 export default class reviewService {
   constructor() {
@@ -144,26 +146,47 @@ export default class reviewService {
     }
   }
 
-  async deletePost(userId, postId) {
+  async deleteReview(userId, reviewId) {
     try {
       if (!isValidObjectId(userId)) {
         throw throwError(400, "userId가 유효하지 않습니다.");
       }
 
-      if (!isValidObjectId(postId)) {
-        throw throwError(400, "postId가 유효하지 않습니다.");
+      if (!isValidObjectId(reviewId)) {
+        throw throwError(400, "reviewId가 유효하지 않습니다.");
       }
 
-      const [comments] = await Promise.all([this.comment.find({ postId })]);
+      const review = await this.review.findById(reviewId);
 
-      const commentIdArr = comments.map((comment) => comment._id);
+      const sunhan = await sunhanServiceInstance.getSunhan(review.sunhanId);
+
+      // sunhan reviews fields의 삭제하려는 리뷰가 있다면
+      if (sunhan.reviews.find((review) => review.id === reviewId)) {
+        // sunhan reviews fields를 filter를 이용해 삭제하려는 리뷰를 제거한 새로운 배열을 만든다
+        sunhan.reviews = sunhan.reviews.filter(
+          (review) => review.id !== reviewId
+        );
+
+        // 새로운 reviews 배열이 0보다 크다면
+        if (sunhan.reviews.length > 0) {
+          const newReview = await this.review
+            .findOne({
+              _id: { $lt: sunhan.reviews[0].id },
+            })
+            .sort({ _id: -1 });
+
+          if (newReview && newReview.id !== reviewId) {
+            sunhan.reviews.unshift(newReview);
+          }
+        }
+      }
 
       await Promise.all([
+        sunhan.save(),
         this.user.findByIdAndUpdate(userId, {
-          $pull: { writePosts: postId, writeComments: { $in: commentIdArr } },
+          $pull: { writeReviews: reviewId },
         }),
-        this.post.findByIdAndDelete(postId),
-        this.this.comment.deleteMany({ postId }),
+        this.review.findByIdAndDelete(reviewId),
       ]);
     } catch (error) {
       console.error(error);

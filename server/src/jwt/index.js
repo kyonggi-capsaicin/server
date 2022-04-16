@@ -54,9 +54,6 @@ export const refreshVerify = async (refreshToken, userId) => {
     // refresh token 가져오기
     const redisRefreshToken = await redisClient.get(userId);
 
-    console.log(refreshToken, "refreshToken");
-    console.log(redisRefreshToken, "redisRefreshToken");
-
     if (refreshToken === redisRefreshToken) {
       try {
         jwt.verify(refreshToken, JWT_SECRET);
