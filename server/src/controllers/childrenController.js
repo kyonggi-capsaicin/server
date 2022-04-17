@@ -5,11 +5,12 @@ const childrenServiceInstance = Container.get(childrenService);
 
 export const getAllChildrenShop = async (req, res, next) => {
   try {
-    const sunhans = await childrenServiceInstance.getAllChildrenShop(
+    const childrenShops = await childrenServiceInstance.getAllChildrenShop(
       req.id,
       req.query
     );
-    return res.status(200).json({ message: "success", data: sunhans });
+
+    return res.status(200).json({ message: "success", data: childrenShops });
   } catch (error) {
     console.error(error);
     next(error);

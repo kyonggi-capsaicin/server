@@ -61,6 +61,47 @@ export default class sunhanService {
     }
   }
 
+  async getAllSunhanGuest(query) {
+    try {
+      // todo
+      // 1. 카테고리별 구현
+
+      let { lat, lng, page, category, sort } = query;
+      page = page ? page : 0;
+
+      const variable = sort === "name" ? { name: 1 } : {};
+
+      const sunhans = await this.sunhan
+        .find(
+          {
+            location: {
+              $nearSphere: {
+                $geometry: {
+                  type: "Point",
+                  coordinates: [lng, lat],
+                },
+                $minDistance: 0,
+                $maxDistance: 5000,
+              },
+            },
+          },
+          {
+            location: 0,
+            __v: 0,
+            reviews: 0,
+          }
+        )
+        .skip(page * 10)
+        .limit(10)
+        .sort(variable);
+
+      return sunhans;
+    } catch (error) {
+      console.error(error);
+      throw serviceError(error);
+    }
+  }
+
   async getSunhan(sunhanId) {
     try {
       if (!isValidObjectId(sunhanId)) {
@@ -86,7 +127,6 @@ export default class sunhanService {
       }
 
       const user = await this.user.findById(userId);
-      console.log(name);
 
       const sunhans = await this.sunhan
         .find(
@@ -97,6 +137,42 @@ export default class sunhanService {
                 $geometry: {
                   type: "Point",
                   coordinates: [user.address.lng, user.address.lat],
+                },
+                $minDistance: 0,
+                $maxDistance: 5000,
+              },
+            },
+          },
+          {
+            location: 0,
+            __v: 0,
+            reviews: 0,
+          }
+        )
+        .skip(page * 10)
+        .limit(10);
+
+      return sunhans;
+    } catch (error) {
+      console.error(error);
+      throw serviceError(error);
+    }
+  }
+
+  async getSearchSunhanGuest(query) {
+    try {
+      let { lat, lng, name, page } = query;
+      page = page ? page : 0;
+
+      const sunhans = await this.sunhan
+        .find(
+          {
+            name: { $regex: name, $options: "i" },
+            location: {
+              $nearSphere: {
+                $geometry: {
+                  type: "Point",
+                  coordinates: [lng, lat],
                 },
                 $minDistance: 0,
                 $maxDistance: 5000,

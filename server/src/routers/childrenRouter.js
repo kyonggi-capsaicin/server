@@ -17,10 +17,10 @@ const childrenRouter = express.Router();
 // 카테고리별 선한 영향력 가게 가져오기
 childrenRouter.get("/", authJWT, getAllChildrenShop);
 
-// 특정 선한 영향력 가게 가져오기
-childrenRouter.get("/:id", getChildrenShop);
-
 // 검색 api
 childrenRouter.get("/search", getSearchChildrenShop);
+
+// 특정 선한 영향력 가게 가져오기
+childrenRouter.get("/:id", getChildrenShop);
 
 export default childrenRouter;

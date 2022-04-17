@@ -22,13 +22,15 @@ export default class childrenService {
       let { page, category, sort } = query;
       page = page ? page : 0;
 
+      const variable = sort === "name" ? { name: 1 } : {};
+
       if (!isValidObjectId(userId)) {
         throw throwError(400, "userId가 유효하지 않습니다.");
       }
 
       const user = await this.user.findById(userId);
 
-      const sunhans = await this.sunhan
+      const childrenShops = await this.child
         .find(
           {
             location: {
@@ -49,9 +51,10 @@ export default class childrenService {
           }
         )
         .skip(page * 10)
-        .limit(10);
+        .limit(10)
+        .sort(variable);
 
-      return sunhans;
+      return childrenShops;
     } catch (error) {
       console.error(error);
       throw serviceError(error);

@@ -4,7 +4,9 @@ import authJWT from "../middlewares/authJWT";
 import {
   getSunhan,
   getSearchSunhan,
+  getSearchSunhanGuest,
   getAllSunhan,
+  getAllSunhanGuest,
 } from "../controllers/sunhanController";
 
 const sunhanRouter = express.Router();
@@ -17,8 +19,14 @@ const sunhanRouter = express.Router();
 // 카테고리별 선한 영향력 가게 가져오기
 sunhanRouter.get("/", authJWT, getAllSunhan);
 
+// 비회원용 카테고리별 선한 영향력 가게 가져오기
+sunhanRouter.get("/guest", getAllSunhanGuest);
+
 // 검색 api
 sunhanRouter.get("/search", authJWT, getSearchSunhan);
+
+// 비회원용 검색 api
+sunhanRouter.get("/search/guest", getSearchSunhanGuest);
 
 // 특정 선한 영향력 가게 가져오기
 sunhanRouter.get("/:id", getSunhan);
