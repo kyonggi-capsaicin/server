@@ -17,10 +17,10 @@ const sunhanRouter = express.Router();
 // 카테고리별 선한 영향력 가게 가져오기
 sunhanRouter.get("/", authJWT, getAllSunhan);
 
+// 검색 api
+sunhanRouter.get("/search", authJWT, getSearchSunhan);
+
 // 특정 선한 영향력 가게 가져오기
 sunhanRouter.get("/:id", getSunhan);
-
-// 검색 api
-sunhanRouter.get("/search", getSearchSunhan);
 
 export default sunhanRouter;

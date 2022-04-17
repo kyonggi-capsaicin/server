@@ -18,7 +18,7 @@ export const getSunhan = async (req, res, next) => {
     const { id: sunhanId } = req.params;
 
     const sunhan = await sunhanServiceInstance.getSunhan(sunhanId);
-    console.log(typeof sunhan.location.coordinates[0]);
+
     return res.status(200).json({ message: "success", data: sunhan });
   } catch (error) {
     console.error(error);
@@ -28,9 +28,10 @@ export const getSunhan = async (req, res, next) => {
 
 export const getSearchSunhan = async (req, res, next) => {
   try {
-    const { id: sunhanId } = req.params;
-
-    const sunhanMenu = await sunhanServiceInstance.getSunhanMenu(sunhanId);
+    const sunhanMenu = await sunhanServiceInstance.getSearchSunhan(
+      req.id,
+      req.query
+    );
 
     return res.status(200).json({ message: "success", data: sunhanMenu });
   } catch (error) {
