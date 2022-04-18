@@ -11,6 +11,7 @@ import reviewRouter from "../routers/reviewRouter";
 import sunhanRouter from "../routers/sunhanRouter";
 import userRouter from "../routers/userRouter";
 import childrenRouter from "../routers/childrenRouter";
+import cardRouter from "../routers/cardRouter";
 
 export default (app) => {
   app.use(express.json());
@@ -27,6 +28,7 @@ export default (app) => {
   app.use("/api/sunhans", sunhanRouter);
   app.use("/api/users", userRouter);
   app.use("/api/children", childrenRouter);
+  app.use("/api/cards", cardRouter);
 
   /// catch 404 and forward to error handler
   app.use((req, res, next) => {

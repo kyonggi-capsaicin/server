@@ -57,7 +57,10 @@ const userSchema = new mongoose.Schema({
   // 아동급식카드
   childCard: [
     {
-      id: Number,
+      name: String,
+
+      accountNumber: Number,
+
       // 잔액
       balance: Number,
     },
