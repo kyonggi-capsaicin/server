@@ -41,6 +41,11 @@ export const childCardShopSchema = new mongoose.Schema({
     type: Number,
   },
 
+  location: {
+    type: { type: String },
+    coordinates: [{ type: Number }],
+  },
+
   // 전화번호
   phoneNumber: {
     type: String,
@@ -86,6 +91,8 @@ export const childCardShopSchema = new mongoose.Schema({
     type: String,
   },
 });
+
+childCardShopSchema.index({ location: "2dsphere" });
 
 const Child = mongoose.model("Child", childCardShopSchema);
 

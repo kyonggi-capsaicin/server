@@ -107,6 +107,10 @@ export default class dataService {
           address: rdnmadr,
           lat: latitude,
           lng: longitude,
+          location: {
+            type: "Point",
+            coordinates: [longitude, latitude],
+          },
           phoneNumber: phoneNumber,
           weekdayStartTime: weekdayOperOpenHhmm,
           weekdayEndTime: weekdayOperColseHhmm,
