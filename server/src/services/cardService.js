@@ -35,9 +35,10 @@ export default class cardService {
       const FinAcno = user.childCard[page].FinAcno;
       const cardName = user.childCard[page].name;
       const accountNumber = user.childCard[page].accountNumber;
+      const _id = user.childCard[page].id;
       const Ldbl = await this.inquireBalance(FinAcno, headers);
 
-      return { Ldbl, cardName, accountNumber };
+      return { Ldbl, cardName, accountNumber, _id };
     } catch (error) {
       console.error(error);
       throw serviceError(error);
@@ -147,25 +148,19 @@ export default class cardService {
     }
   }
 
-  async deleteCard(userId, shopId, type) {
+  async deleteCard(userId, cardId) {
     try {
       if (!isValidObjectId(userId)) {
         throw throwError(400, "userId가 유효하지 않습니다.");
       }
 
-      if (!isValidObjectId(shopId)) {
-        throw throwError(400, "shopId가 유효하지 않습니다.");
+      if (!isValidObjectId(cardId)) {
+        throw throwError(400, "cardId가 유효하지 않습니다.");
       }
 
-      if (type === "sunhan") {
-        await this.user.findByIdAndUpdate(userId, {
-          $pull: { scrapSunhan: shopId },
-        });
-      } else if (type === "children") {
-        await this.user.findByIdAndUpdate(userId, {
-          $pull: { scrapChild: shopId },
-        });
-      }
+      await this.user.findByIdAndUpdate(userId, {
+        $pull: { childCard: { _id: cardId } },
+      });
     } catch (error) {
       console.error(error);
       throw serviceError(error);

@@ -6,12 +6,13 @@ const cardServiceInstance = Container.get(cardService);
 export const getCardBalance = async (req, res, next) => {
   try {
     const { page } = req.query;
-    const { Ldbl, cardName, accountNumber } =
+    const { Ldbl, cardName, accountNumber, _id } =
       await cardServiceInstance.getCardBalance(req.id, page);
 
-    return res
-      .status(200)
-      .json({ message: "success", data: { Ldbl, cardName, accountNumber } });
+    return res.status(200).json({
+      message: "success",
+      data: { Ldbl, cardName, accountNumber, _id },
+    });
   } catch (error) {
     console.error(error);
     next(error);
@@ -30,10 +31,9 @@ export const createCard = async (req, res, next) => {
 
 export const deleteCard = async (req, res, next) => {
   try {
-    const { id: shopId } = req.params;
-    const { type } = req.query;
+    const { id: cardId } = req.params;
 
-    await cardServiceInstance.deleteCard(req.id, shopId, type);
+    await cardServiceInstance.deleteCard(req.id, cardId);
     return res.status(200).json({ message: "success" });
   } catch (error) {
     console.error(error);
