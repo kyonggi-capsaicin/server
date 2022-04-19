@@ -18,7 +18,7 @@ export const getCardBalance = async (req, res, next) => {
 
 export const createCard = async (req, res, next) => {
   try {
-    await cardServiceInstance.createCard(req.body);
+    await cardServiceInstance.createCard(req.id, req.body);
     return res.status(200).json({ message: "success" });
   } catch (error) {
     console.error(error);

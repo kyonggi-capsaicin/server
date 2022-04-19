@@ -57,6 +57,10 @@ const userSchema = new mongoose.Schema({
   // 아동급식카드
   childCard: [
     {
+      // 농협 api 핀-어카운트
+      // 핀-어카운트를 이용해 계속 잔액 조회 가능
+      FinAcno: String,
+
       name: String,
 
       accountNumber: Number,

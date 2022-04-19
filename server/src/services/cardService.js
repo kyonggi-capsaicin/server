@@ -38,8 +38,18 @@ export default class cardService {
     }
   }
 
-  async createCard(cardDTO) {
+  async createCard(userId, cardDTO) {
     try {
+      const user = await this.user.findById(userId);
+
+      if (
+        user.childCard.find(
+          (card) => card.accountNumber === cardDTO.accountNumber
+        )
+      ) {
+        throw throwError(400, "이미 존재하는 계좌번호입니다.");
+      }
+
       const headers = {
         Tsymd: currentDate(),
         Iscd: process.env.NH_ISCD,
@@ -48,20 +58,24 @@ export default class cardService {
         AccessToken: process.env.NH_ACCESS_TOKEN,
       };
 
-      await this.createFinAccountDirect(cardDTO, headers);
+      const { FinAcno, Ldbl } = await this.finAccountDirect(cardDTO, headers);
+      cardDTO.FinAcno = FinAcno;
+      cardDTO.balance = Ldbl;
+
+      await this.user.findByIdAndUpdate(userId, {
+        $push: { childCard: cardDTO },
+      });
     } catch (error) {
       console.error(error);
       throw serviceError(error);
     }
   }
 
-  async createFinAccountDirect(cardDTO, headers) {
+  async finAccountDirect(cardDTO, headers) {
     try {
       headers.Trtm = currentTime();
       headers.ApiNm = "OpenFinAccountDirect";
       headers.IsTuno = parseInt(Math.random() * 1000000000);
-
-      console.log(headers);
 
       const baseUrl = "https://developers.nonghyup.com/OpenFinAccountDirect.nh";
       const { data } = await axios.post(baseUrl, {
@@ -72,7 +86,55 @@ export default class cardService {
         Acno: cardDTO.accountNumber,
       });
 
-      console.log("data", data);
+      cardDTO.Rgno = data.Rgno;
+      const { FinAcno, Ldbl } = await this.cheackOpenFinAccountDirect(
+        cardDTO,
+        headers
+      );
+
+      return { FinAcno, Ldbl };
+    } catch (error) {
+      console.error(error);
+      throw serviceError(error);
+    }
+  }
+
+  async cheackOpenFinAccountDirect(cardDTO, headers) {
+    try {
+      headers.Trtm = currentTime();
+      headers.ApiNm = "CheckOpenFinAccountDirect";
+      headers.IsTuno = parseInt(Math.random() * 1000000000);
+
+      const baseUrl =
+        "https://developers.nonghyup.com/CheckOpenFinAccountDirect.nh";
+      const { data } = await axios.post(baseUrl, {
+        Header: headers,
+        Rgno: cardDTO.Rgno,
+        BrdtBrno: cardDTO.birthday,
+      });
+
+      const Ldbl = await this.inquireBalance(data.FinAcno, headers);
+
+      return { FinAcno: data.FinAcno, Ldbl };
+    } catch (error) {
+      console.error(error);
+      throw serviceError(error);
+    }
+  }
+
+  async inquireBalance(FinAcno, headers) {
+    try {
+      headers.Trtm = currentTime();
+      headers.ApiNm = "InquireBalance";
+      headers.IsTuno = parseInt(Math.random() * 1000000000);
+
+      const baseUrl = "https://developers.nonghyup.com/InquireBalance.nh";
+      const { data } = await axios.post(baseUrl, {
+        Header: headers,
+        FinAcno: FinAcno,
+      });
+
+      return data.Ldbl;
     } catch (error) {
       console.error(error);
       throw serviceError(error);
