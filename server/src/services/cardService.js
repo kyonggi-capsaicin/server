@@ -14,24 +14,30 @@ export default class cardService {
     this.user = User;
   }
 
-  async getCardBalance(userId, type) {
+  async getCardBalance(userId, page) {
     try {
       if (!isValidObjectId(userId)) {
         throw throwError(400, "userId가 유효하지 않습니다.");
       }
 
-      let scraps;
-      if (type === "sunhan") {
-        scraps = await this.user
-          .findById(userId, { scrapSunhan: 1, _id: 0 })
-          .populate("scrapSunhan");
-      } else if (type === "children") {
-        scraps = await this.user
-          .findById(userId, { scrapChild: 1, _id: 0 })
-          .populate("scrapChild");
-      }
+      const headers = {
+        Tsymd: currentDate(),
+        Iscd: process.env.NH_ISCD,
+        FintechApsno: "001",
+        ApiSvcCd: "DrawingTransferA",
+        AccessToken: process.env.NH_ACCESS_TOKEN,
+      };
 
-      return scraps;
+      page = page ? page : 0;
+
+      const user = await this.user.findById(userId);
+
+      const FinAcno = user.childCard[page].FinAcno;
+      const cardName = user.childCard[page].name;
+      const accountNumber = user.childCard[page].accountNumber;
+      const Ldbl = await this.inquireBalance(FinAcno, headers);
+
+      return { Ldbl, cardName, accountNumber };
     } catch (error) {
       console.error(error);
       throw serviceError(error);

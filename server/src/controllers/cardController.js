@@ -5,11 +5,13 @@ const cardServiceInstance = Container.get(cardService);
 
 export const getCardBalance = async (req, res, next) => {
   try {
-    let { type } = req.query;
+    const { page } = req.query;
+    const { Ldbl, cardName, accountNumber } =
+      await cardServiceInstance.getCardBalance(req.id, page);
 
-    type = type ? type : "sunhan";
-    const scraps = await cardServiceInstance.getCardBalance(req.id, type);
-    return res.status(200).json({ message: "success", data: scraps });
+    return res
+      .status(200)
+      .json({ message: "success", data: { Ldbl, cardName, accountNumber } });
   } catch (error) {
     console.error(error);
     next(error);
