@@ -84,6 +84,7 @@ export const childCardShopSchema = new mongoose.Schema({
   // 카테고리
   category: {
     type: String,
+    default: "",
   },
 
   // 상세 카테고리

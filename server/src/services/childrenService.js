@@ -15,10 +15,6 @@ export default class childrenService {
 
   async getAllChildrenShop(userId, query) {
     try {
-      // todo
-      // 1. sort 구현
-      // 2. 카테고리별 구현
-
       let { page, category, sort } = query;
       page = page ? page : 0;
 
@@ -33,6 +29,7 @@ export default class childrenService {
       const childrenShops = await this.child
         .find(
           {
+            category: category,
             location: {
               $nearSphere: {
                 $geometry: {

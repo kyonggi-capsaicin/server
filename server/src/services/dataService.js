@@ -43,6 +43,10 @@ export default class dataService {
             COT_IMG_MAIN_URL,
           } = data.data.body[0];
 
+          if (!COT_COORD_X || !COT_COORD_Y) {
+            continue;
+          }
+
           const sunhan = new this.sunhan({
             name: COT_CONTS_NAME,
             openingHours: COT_VALUE_01,
@@ -97,6 +101,10 @@ export default class dataService {
           holidayOperOpenHhmm,
           holidayCloseOpenHhmm,
         } = items[i];
+
+        if (!latitude || !longitude) {
+          continue;
+        }
 
         const child = new Child({
           name: mrhstNm,

@@ -15,10 +15,6 @@ export default class sunhanService {
 
   async getAllSunhan(userId, query) {
     try {
-      // todo
-      // 1. sort 구현
-      // 2. 카테고리별 구현
-
       let { page, category, sort } = query;
       page = page ? page : 0;
 
@@ -33,6 +29,7 @@ export default class sunhanService {
       const sunhans = await this.sunhan
         .find(
           {
+            category: category,
             location: {
               $nearSphere: {
                 $geometry: {
