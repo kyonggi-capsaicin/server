@@ -47,13 +47,12 @@ export const getChildrenShop = async (req, res, next) => {
 
 export const getSearchChildrenShop = async (req, res, next) => {
   try {
-    const { id: sunhanId } = req.params;
-
-    const sunhanMenu = await childrenServiceInstance.getSearchChildrenShop(
-      sunhanId
+    const childrenShops = await childrenServiceInstance.getSearchChildrenShop(
+      req.id,
+      req.query
     );
 
-    return res.status(200).json({ message: "success", data: sunhanMenu });
+    return res.status(200).json({ message: "success", data: childrenShops });
   } catch (error) {
     console.error(error);
     next(error);

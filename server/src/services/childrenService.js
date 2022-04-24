@@ -114,15 +114,41 @@ export default class childrenService {
     }
   }
 
-  async getSearchChildrenShop(sunhanId) {
+  async getSearchChildrenShop(userId, query) {
     try {
-      if (!isValidObjectId(sunhanId)) {
-        throw throwError(400, "sunhanId가 유효하지 않습니다.");
+      const { name, page } = query;
+
+      if (!isValidObjectId(userId)) {
+        throw throwError(400, "userId가 유효하지 않습니다.");
       }
 
-      const sunhan = await this.sunhan.findById(sunhanId, { __v: 0 });
+      const user = await this.user.findById(userId);
 
-      return sunhan;
+      const childrenShops = await this.child
+        .find(
+          {
+            name: { $regex: name, $options: "i" },
+            location: {
+              $nearSphere: {
+                $geometry: {
+                  type: "Point",
+                  coordinates: [user.address.lng, user.address.lat],
+                },
+                $minDistance: 0,
+                $maxDistance: 3000,
+              },
+            },
+          },
+          {
+            location: 0,
+            __v: 0,
+            reviews: 0,
+          }
+        )
+        .skip(page * 10)
+        .limit(10);
+
+      return childrenShops;
     } catch (error) {
       console.error(error);
       throw serviceError(error);
