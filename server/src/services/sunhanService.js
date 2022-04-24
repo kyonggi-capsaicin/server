@@ -29,7 +29,7 @@ export default class sunhanService {
       const sunhans = await this.sunhan
         .find(
           {
-            category: category,
+            category,
             location: {
               $nearSphere: {
                 $geometry: {
@@ -37,7 +37,7 @@ export default class sunhanService {
                   coordinates: [user.address.lng, user.address.lat],
                 },
                 $minDistance: 0,
-                $maxDistance: 5000,
+                $maxDistance: 3000,
               },
             },
           },
@@ -71,6 +71,7 @@ export default class sunhanService {
       const sunhans = await this.sunhan
         .find(
           {
+            category,
             location: {
               $nearSphere: {
                 $geometry: {
@@ -78,7 +79,7 @@ export default class sunhanService {
                   coordinates: [lng, lat],
                 },
                 $minDistance: 0,
-                $maxDistance: 5000,
+                $maxDistance: 3000,
               },
             },
           },
@@ -186,6 +187,19 @@ export default class sunhanService {
         .limit(10);
 
       return sunhans;
+    } catch (error) {
+      console.error(error);
+      throw serviceError(error);
+    }
+  }
+
+  async getAllCategory() {
+    try {
+      const category = await this.sunhan.find().distinct("category");
+      const detailCategory = await this.sunhan
+        .find()
+        .distinct("detailCategory");
+      return { category, detailCategory };
     } catch (error) {
       console.error(error);
       throw serviceError(error);

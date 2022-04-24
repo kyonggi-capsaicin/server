@@ -62,3 +62,16 @@ export const getSearchSunhanGuest = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getAllCategory = async (req, res, next) => {
+  try {
+    const { category, detailCategory } =
+      await sunhanServiceInstance.getAllCategory();
+    return res
+      .status(200)
+      .json({ message: "success", data: { category, detailCategory } });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};

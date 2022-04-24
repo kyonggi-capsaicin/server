@@ -7,6 +7,7 @@ import {
   getSearchSunhanGuest,
   getAllSunhan,
   getAllSunhanGuest,
+  getAllCategory,
 } from "../controllers/sunhanController";
 
 const sunhanRouter = express.Router();
@@ -27,6 +28,9 @@ sunhanRouter.get("/search", authJWT, getSearchSunhan);
 
 // 비회원용 검색 api
 sunhanRouter.get("/search/guest", getSearchSunhanGuest);
+
+// 모든 카테고리 가져오기
+sunhanRouter.get("/category", getAllCategory);
 
 // 특정 선한 영향력 가게 가져오기
 sunhanRouter.get("/:id", getSunhan);

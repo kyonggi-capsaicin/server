@@ -3,8 +3,11 @@ import authJWT from "../middlewares/authJWT";
 
 import {
   getAllChildrenShop,
+  getAllChildrenShopGuest,
   getChildrenShop,
   getSearchChildrenShop,
+  getSearchChildrenShopGuest,
+  getAllCategory,
 } from "../controllers/childrenController";
 
 const childrenRouter = express.Router();
@@ -14,13 +17,22 @@ const childrenRouter = express.Router();
 // 2. 이름 검색 API
 // 3. 아동급식카드 가맹점 API 제작
 
-// 카테고리별 선한 영향력 가게 가져오기
+// 카테고리별 아동급식카드 가맹점 가져오기
 childrenRouter.get("/", authJWT, getAllChildrenShop);
 
-// 검색 api
-childrenRouter.get("/search", getSearchChildrenShop);
+// 비회원용 카테고리별 아동급식카드 가맹점 가져오기
+childrenRouter.get("/guest", getAllChildrenShopGuest);
 
-// 특정 선한 영향력 가게 가져오기
+// 검색 api
+childrenRouter.get("/search", authJWT, getSearchChildrenShop);
+
+// 비회원용 검색 api
+childrenRouter.get("/search", getSearchChildrenShopGuest);
+
+// 모든 카테고리 가져오기
+childrenRouter.get("/category", getAllCategory);
+
+// 특정 아동급식카드 가맹점 가져오기
 childrenRouter.get("/:id", getChildrenShop);
 
 export default childrenRouter;

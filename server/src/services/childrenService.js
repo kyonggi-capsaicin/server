@@ -58,6 +58,45 @@ export default class childrenService {
     }
   }
 
+  async getAllChildrenShopGuest(query) {
+    try {
+      let { page, category, sort, lat, lng } = query;
+      page = page ? page : 0;
+
+      const variable = sort === "name" ? { name: 1 } : {};
+
+      const childrenShops = await this.child
+        .find(
+          {
+            category: category,
+            location: {
+              $nearSphere: {
+                $geometry: {
+                  type: "Point",
+                  coordinates: [lng, user.address.lat],
+                },
+                $minDistance: 0,
+                $maxDistance: 5000,
+              },
+            },
+          },
+          {
+            location: 0,
+            __v: 0,
+            reviews: 0,
+          }
+        )
+        .skip(page * 10)
+        .limit(10)
+        .sort(variable);
+
+      return childrenShops;
+    } catch (error) {
+      console.error(error);
+      throw serviceError(error);
+    }
+  }
+
   async getChildrenShop(childrenShopId) {
     try {
       if (!isValidObjectId(childrenShopId)) {
