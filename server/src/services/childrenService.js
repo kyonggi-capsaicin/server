@@ -154,4 +154,39 @@ export default class childrenService {
       throw serviceError(error);
     }
   }
+
+  async getSearchChildrenShopGuest(query) {
+    try {
+      const { name, page, lat, lng } = query;
+
+      const childrenShops = await this.child
+        .find(
+          {
+            name: { $regex: name, $options: "i" },
+            location: {
+              $nearSphere: {
+                $geometry: {
+                  type: "Point",
+                  coordinates: [lng, lat],
+                },
+                $minDistance: 0,
+                $maxDistance: 3000,
+              },
+            },
+          },
+          {
+            location: 0,
+            __v: 0,
+            reviews: 0,
+          }
+        )
+        .skip(page * 10)
+        .limit(10);
+
+      return childrenShops;
+    } catch (error) {
+      console.error(error);
+      throw serviceError(error);
+    }
+  }
 }

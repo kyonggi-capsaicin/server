@@ -27,7 +27,7 @@ childrenRouter.get("/guest", getAllChildrenShopGuest);
 childrenRouter.get("/search", authJWT, getSearchChildrenShop);
 
 // 비회원용 검색 api
-childrenRouter.get("/search", getSearchChildrenShopGuest);
+childrenRouter.get("/search/guest", getSearchChildrenShopGuest);
 
 // 모든 카테고리 가져오기
 childrenRouter.get("/category", getAllCategory);
