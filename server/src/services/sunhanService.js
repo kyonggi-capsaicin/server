@@ -112,14 +112,15 @@ export default class sunhanService {
         throw throwError(400, "sunhanId가 유효하지 않습니다.");
       }
 
-      const sunhan = await this.sunhan.findById(sunhanId, {
-        image: 0,
-        location: 0,
-        __v: 0,
-        reviews: 0,
-        lat: 0,
-        lng: 0,
-      });
+      const sunhan = await this.sunhan
+        .findById(sunhanId, {
+          image: 0,
+          location: 0,
+          __v: 0,
+          lat: 0,
+          lng: 0,
+        })
+        .sort({ "reviews._id": -1 });
 
       return sunhan;
     } catch (error) {

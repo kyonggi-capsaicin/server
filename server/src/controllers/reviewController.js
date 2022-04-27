@@ -7,11 +7,9 @@ const reviewServiceInstance = Container.get(reviewService);
 
 export const getAllReviews = async (req, res, next) => {
   try {
-    const { id: sunhanId } = req.params;
-    let { page } = req.query;
-    page = page ? page : 0;
+    const { id } = req.params;
 
-    const posts = await reviewServiceInstance.getAllReviews(sunhanId, page);
+    const posts = await reviewServiceInstance.getAllReviews(id, req.query);
     return res.status(200).json({ message: "success", data: posts });
   } catch (error) {
     console.error(error);

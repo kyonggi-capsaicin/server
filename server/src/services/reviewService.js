@@ -22,35 +22,33 @@ export default class reviewService {
     this.child = Child;
   }
 
-  async getAllReviews(sunhanId, page) {
+  async getAllReviews(id, query) {
     try {
-      if (!isValidObjectId(sunhanId)) {
-        throw throwError(400, "sunhanId가 유효하지 않습니다.");
+      if (!isValidObjectId(id)) {
+        throw throwError(400, "가맹점 id가 유효하지 않습니다.");
       }
 
-      const reviews = await this.review
-        .find({ sunhanId }, { __v: 0 })
-        .sort({ _id: -1 })
-        .skip(page * 10)
-        .limit(10);
+      let { page, type } = query;
+      page = page ? page : 0;
+
+      let reviews;
+      if (type === "sunhan") {
+        reviews = await this.review
+          .find({ sunhanId: id }, { __v: 0 })
+          .sort({ _id: -1 })
+          .skip(page * 10)
+          .limit(10);
+      } else if (type === "children") {
+        reviews = await this.review
+          .find({ childrenId: id }, { __v: 0 })
+          .sort({ _id: -1 })
+          .skip(page * 10)
+          .limit(10);
+      }
 
       return reviews;
     } catch (error) {
       console.error(error.message);
-      throw serviceError(error);
-    }
-  }
-
-  async getPost(postId) {
-    try {
-      if (!isValidObjectId(postId)) {
-        throw throwError(400, "postId가 유효하지 않습니다.");
-      }
-
-      const post = await this.post.findById(postId, { __v: 0 });
-      return post;
-    } catch (error) {
-      console.error(error);
       throw serviceError(error);
     }
   }
