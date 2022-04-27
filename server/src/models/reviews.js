@@ -22,6 +22,11 @@ export const reviewSchema = new mongoose.Schema({
     ref: "Sunhan",
   },
 
+  childrenId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Child",
+  },
+
   content: {
     type: String,
     required: true,

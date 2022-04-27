@@ -4,6 +4,7 @@ import Review from "../models/reviews";
 import User from "../models/users";
 import Sunhan from "../models/sunhanShop";
 import Post from "../models/posts";
+import Child from "../models/childCardShop";
 import throwError from "../utils/throwError";
 import serviceError from "../utils/serviceError";
 import { isValidObjectId } from "mongoose";
@@ -18,6 +19,7 @@ export default class reviewService {
     this.user = User;
     this.sunhan = Sunhan;
     this.post = Post;
+    this.child = Child;
   }
 
   async getAllReviews(sunhanId, page) {
@@ -70,16 +72,29 @@ export default class reviewService {
       reviewDTO.updateAt = seoulDate();
 
       const newReview = new this.review(reviewDTO);
+      let review;
 
-      const [review] = await Promise.all([
-        newReview.save(),
-        this.user.findByIdAndUpdate(userId, {
-          $push: { writeReviews: { $each: [newReview.id], $position: 0 } },
-        }),
-        this.sunhan.findByIdAndUpdate(reviewDTO.sunhanId, {
-          $push: { reviews: { $each: [newReview], $slice: -10 } },
-        }),
-      ]);
+      if (reviewDTO.sunhanId) {
+        [review] = await Promise.all([
+          newReview.save(),
+          this.user.findByIdAndUpdate(userId, {
+            $push: { writeReviews: { $each: [newReview.id], $position: 0 } },
+          }),
+          this.sunhan.findByIdAndUpdate(reviewDTO.sunhanId, {
+            $push: { reviews: { $each: [newReview], $slice: -10 } },
+          }),
+        ]);
+      } else if (reviewDTO.childrenId) {
+        [review] = await Promise.all([
+          newReview.save(),
+          this.user.findByIdAndUpdate(userId, {
+            $push: { writeReviews: { $each: [newReview.id], $position: 0 } },
+          }),
+          this.child.findByIdAndUpdate(reviewDTO.childrenId, {
+            $push: { reviews: { $each: [newReview], $slice: -10 } },
+          }),
+        ]);
+      }
 
       return review;
     } catch (error) {

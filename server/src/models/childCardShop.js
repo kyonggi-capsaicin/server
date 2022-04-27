@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { reviewSchema } from "./reviews";
 
 export const childCardShopSchema = new mongoose.Schema({
   // 가맹점명
@@ -91,6 +92,8 @@ export const childCardShopSchema = new mongoose.Schema({
   detailCategory: {
     type: String,
   },
+
+  reviews: [reviewSchema],
 });
 
 childCardShopSchema.index({ location: "2dsphere" });

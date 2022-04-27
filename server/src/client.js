@@ -11,7 +11,7 @@ const test = async () => {
   console.time("loading time: ");
 
   try {
-    await axios.get(`${URI}/api/sunhans/624ed5bf8b6bb24b83b3b134`, {
+    await axios.get(`${URI}/api/posts?page=3000`, {
       headers: {
         Authorization:
           "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNGQ2MDcyYjYwZWFlNWY3OWNiZTNmMyIsIm5pY2tuYW1lIjoi7ISg7ZWcNDc2MyIsImlhdCI6MTY0OTUwNzE0MiwiZXhwIjoxNjQ5NTA4OTQyfQ.vFaPlJKN8EK7U8BSm6RW21PPizzstYwVs5uUAGYKHCU",

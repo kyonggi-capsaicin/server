@@ -42,9 +42,14 @@ export default class childrenService {
             },
           },
           {
-            location: 0,
             __v: 0,
-            reviews: 0,
+            location: 0,
+            fullCityNameCode: 0,
+            code: 0,
+            cityName: 0,
+            fullCityName: 0,
+            lat: 0,
+            lng: 0,
           }
         )
         .skip(page * 10)
@@ -73,7 +78,7 @@ export default class childrenService {
               $nearSphere: {
                 $geometry: {
                   type: "Point",
-                  coordinates: [lng, user.address.lat],
+                  coordinates: [lng, lat],
                 },
                 $minDistance: 0,
                 $maxDistance: 5000,
@@ -81,9 +86,14 @@ export default class childrenService {
             },
           },
           {
-            location: 0,
             __v: 0,
-            reviews: 0,
+            location: 0,
+            fullCityNameCode: 0,
+            code: 0,
+            cityName: 0,
+            fullCityName: 0,
+            lat: 0,
+            lng: 0,
           }
         )
         .skip(page * 10)
@@ -105,6 +115,13 @@ export default class childrenService {
 
       const childrenShop = await this.child.findById(childrenShopId, {
         __v: 0,
+        location: 0,
+        fullCityNameCode: 0,
+        code: 0,
+        cityName: 0,
+        fullCityName: 0,
+        lat: 0,
+        lng: 0,
       });
 
       return childrenShop;
@@ -140,9 +157,14 @@ export default class childrenService {
             },
           },
           {
-            location: 0,
             __v: 0,
-            reviews: 0,
+            location: 0,
+            fullCityNameCode: 0,
+            code: 0,
+            cityName: 0,
+            fullCityName: 0,
+            lat: 0,
+            lng: 0,
           }
         )
         .skip(page * 10)
@@ -175,15 +197,31 @@ export default class childrenService {
             },
           },
           {
-            location: 0,
             __v: 0,
-            reviews: 0,
+            location: 0,
+            fullCityNameCode: 0,
+            code: 0,
+            cityName: 0,
+            fullCityName: 0,
+            lat: 0,
+            lng: 0,
           }
         )
         .skip(page * 10)
         .limit(10);
 
       return childrenShops;
+    } catch (error) {
+      console.error(error);
+      throw serviceError(error);
+    }
+  }
+
+  async getAllCategory() {
+    try {
+      const category = await this.child.find().distinct("category");
+      const detailCategory = await this.child.find().distinct("detailCategory");
+      return { category, detailCategory };
     } catch (error) {
       console.error(error);
       throw serviceError(error);

@@ -12,12 +12,19 @@ import sunhanRouter from "../routers/sunhanRouter";
 import userRouter from "../routers/userRouter";
 import childrenRouter from "../routers/childrenRouter";
 import cardRouter from "../routers/cardRouter";
+import { generateFakeData } from "../faker";
 
 export default (app) => {
   app.use(express.json());
   app.use(morgan("dev"));
 
   app.use("/img", express.static("uploads"));
+
+  //faker
+  // const generateFake = async () => {
+  //   await generateFakeData(5000);
+  // };
+  // generateFake();
 
   app.use("/api/data", dataRouter);
   app.use("/api/posts", postRouter);

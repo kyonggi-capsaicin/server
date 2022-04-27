@@ -74,7 +74,8 @@ export const getSearchChildrenShopGuest = async (req, res, next) => {
 export const getAllCategory = async (req, res, next) => {
   try {
     const { category, detailCategory } =
-      await sunhanServiceInstance.getAllCategory();
+      await childrenServiceInstance.getAllCategory();
+
     return res
       .status(200)
       .json({ message: "success", data: { category, detailCategory } });

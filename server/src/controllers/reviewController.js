@@ -34,6 +34,7 @@ export const createReview = async (req, res, next) => {
 
     return res.status(200).json({ message: "success", data: review });
   } catch (error) {
+    console.error(error);
     next(error);
   }
 };

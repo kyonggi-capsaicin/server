@@ -20,7 +20,7 @@ export default class postService {
   async getAllPosts(page) {
     try {
       const posts = await this.post
-        .find({}, { __v: 0 })
+        .find({}, { __v: 0, blockNumber: 0 })
         .sort({ _id: -1 })
         .skip(page * 10)
         .limit(10);
@@ -38,7 +38,7 @@ export default class postService {
         throw throwError(400, "postId가 유효하지 않습니다.");
       }
 
-      const post = await this.post.findById(postId, { __v: 0 });
+      const post = await this.post.findById(postId, { __v: 0, blockNumber: 0 });
       return post;
     } catch (error) {
       console.error(error);
@@ -67,7 +67,10 @@ export default class postService {
         }),
       ]);
 
-      const postWithoutVersion = await this.post.findById(post.id, { __v: 0 });
+      const postWithoutVersion = await this.post.findById(post.id, {
+        __v: 0,
+        blockNumber: 0,
+      });
 
       return postWithoutVersion;
     } catch (error) {
@@ -86,7 +89,7 @@ export default class postService {
 
       const updatedPost = await this.post.findByIdAndUpdate(postId, updateDTO, {
         new: true,
-        projection: { __v: 0 },
+        projection: { __v: 0, blockNumber: 0 },
       });
 
       return updatedPost;

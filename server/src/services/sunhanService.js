@@ -42,9 +42,12 @@ export default class sunhanService {
             },
           },
           {
+            image: 0,
             location: 0,
             __v: 0,
             reviews: 0,
+            lat: 0,
+            lng: 0,
           }
         )
         .skip(page * 10)
@@ -84,9 +87,12 @@ export default class sunhanService {
             },
           },
           {
+            image: 0,
             location: 0,
             __v: 0,
             reviews: 0,
+            lat: 0,
+            lng: 0,
           }
         )
         .skip(page * 10)
@@ -106,7 +112,14 @@ export default class sunhanService {
         throw throwError(400, "sunhanId가 유효하지 않습니다.");
       }
 
-      const sunhan = await this.sunhan.findById(sunhanId, { __v: 0 });
+      const sunhan = await this.sunhan.findById(sunhanId, {
+        image: 0,
+        location: 0,
+        __v: 0,
+        reviews: 0,
+        lat: 0,
+        lng: 0,
+      });
 
       return sunhan;
     } catch (error) {
@@ -141,11 +154,7 @@ export default class sunhanService {
               },
             },
           },
-          {
-            location: 0,
-            __v: 0,
-            reviews: 0,
-          }
+          { image: 0, location: 0, __v: 0, reviews: 0, lat: 0, lng: 0 }
         )
         .skip(page * 10)
         .limit(10);
@@ -178,9 +187,12 @@ export default class sunhanService {
             },
           },
           {
+            image: 0,
             location: 0,
             __v: 0,
             reviews: 0,
+            lat: 0,
+            lng: 0,
           }
         )
         .skip(page * 10)
