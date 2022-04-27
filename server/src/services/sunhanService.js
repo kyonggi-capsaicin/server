@@ -3,7 +3,7 @@ import Sunhan from "../models/sunhanShop";
 import User from "../models/users";
 import throwError from "../utils/throwError";
 import serviceError from "../utils/serviceError";
-import { isValidObjectId } from "mongoose";
+import mongoose from "mongoose";
 import logger from "../config/logger";
 
 @Service()
@@ -108,19 +108,28 @@ export default class sunhanService {
 
   async getSunhan(sunhanId) {
     try {
-      if (!isValidObjectId(sunhanId)) {
+      if (!mongoose.isValidObjectId(sunhanId)) {
         throw throwError(400, "sunhanId가 유효하지 않습니다.");
       }
 
-      const sunhan = await this.sunhan
-        .findById(sunhanId, {
-          image: 0,
-          location: 0,
-          __v: 0,
-          lat: 0,
-          lng: 0,
-        })
-        .sort({ "reviews._id": -1 });
+      const sunhan = await this.sunhan.aggregate([
+        { $match: { _id: mongoose.Types.ObjectId(sunhanId) } },
+        { $unwind: "$reviews" },
+        { $sort: { "reviews._id": -1 } },
+        {
+          $group: {
+            _id: "$_id",
+            name: { $first: "$name" },
+            openingHours: { $first: "$openingHours" },
+            address: { $first: "$address" },
+            tatget: { $first: "$tatget" },
+            offer: { $first: "$offer" },
+            phoneNumber: { $first: "$phoneNumber" },
+            category: { $first: "$category" },
+            reviews: { $push: "$reviews" },
+          },
+        },
+      ]);
 
       return sunhan;
     } catch (error) {

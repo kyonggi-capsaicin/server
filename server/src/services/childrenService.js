@@ -3,7 +3,7 @@ import Child from "../models/childCardShop";
 import User from "../models/users";
 import throwError from "../utils/throwError";
 import serviceError from "../utils/serviceError";
-import { isValidObjectId } from "mongoose";
+import mongoose from "mongoose";
 import logger from "../config/logger";
 
 @Service()
@@ -109,20 +109,31 @@ export default class childrenService {
 
   async getChildrenShop(childrenShopId) {
     try {
-      if (!isValidObjectId(childrenShopId)) {
+      if (!mongoose.isValidObjectId(childrenShopId)) {
         throw throwError(400, "childrenShopId가 유효하지 않습니다.");
       }
 
-      const childrenShop = await this.child.findById(childrenShopId, {
-        __v: 0,
-        location: 0,
-        fullCityNameCode: 0,
-        code: 0,
-        cityName: 0,
-        fullCityName: 0,
-        lat: 0,
-        lng: 0,
-      });
+      const childrenShop = await this.child.aggregate([
+        { $match: { _id: mongoose.Types.ObjectId(childrenShopId) } },
+        { $unwind: "$reviews" },
+        { $sort: { "reviews._id": -1 } },
+        {
+          $group: {
+            _id: "$_id",
+            name: { $first: "$name" },
+            address: { $first: "$address" },
+            phoneNumber: { $first: "$phoneNumber" },
+            weekdayStartTime: { $first: "$weekdayStartTime" },
+            weekdayEndTime: { $first: "$weekdayEndTime" },
+            weekendStartTime: { $first: "$weekendStartTime" },
+            weekendEndTime: { $first: "$weekendEndTime" },
+            holydayStartTime: { $first: "$holydayStartTime" },
+            holydayEndTime: { $first: "$holydayEndTime" },
+            category: { $first: "$category" },
+            reviews: { $push: "$reviews" },
+          },
+        },
+      ]);
 
       return childrenShop;
     } catch (error) {
