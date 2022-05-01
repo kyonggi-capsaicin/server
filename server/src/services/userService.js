@@ -36,6 +36,61 @@ export default class userService {
     }
   }
 
+  async getUserWritePosts(userId, page) {
+    try {
+      if (!isValidObjectId(userId)) {
+        throw throwError(400, "userId가 유효하지 않습니다.");
+      }
+
+      page = page ? page : 0;
+
+      const user = await this.user
+        .findById(userId, { writePosts: 1 })
+        .populate("writePosts", "writer content _id createAt commentCount");
+
+      return user;
+    } catch (error) {
+      console.error(error);
+      throw serviceError(error);
+    }
+  }
+
+  async getUserWriteComments(userId) {
+    try {
+      if (!isValidObjectId(userId)) {
+        throw throwError(400, "userId가 유효하지 않습니다.");
+      }
+
+      const user = await this.user.findById(userId, {
+        email: 1,
+        nickname: 1,
+      });
+
+      return user;
+    } catch (error) {
+      console.error(error);
+      throw serviceError(error);
+    }
+  }
+
+  async getUserWriteReviews(userId) {
+    try {
+      if (!isValidObjectId(userId)) {
+        throw throwError(400, "userId가 유효하지 않습니다.");
+      }
+
+      const user = await this.user.findById(userId, {
+        email: 1,
+        nickname: 1,
+      });
+
+      return user;
+    } catch (error) {
+      console.error(error);
+      throw serviceError(error);
+    }
+  }
+
   async setAddressInfo(userId, addressDTO) {
     try {
       await this.user.findByIdAndUpdate(userId, { address: addressDTO });

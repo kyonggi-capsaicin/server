@@ -23,7 +23,7 @@ export const naverLogin = async (req, res, next) => {
     );
 
     if (!result) {
-      return next(throwError(400, "accessToken이 유효하지 않습니다."));
+      return throwError(400, "accessToken이 유효하지 않습니다.");
     }
 
     const {

@@ -5,7 +5,38 @@ const userServiceInstance = Container.get(userService);
 
 export const getUser = async (req, res, next) => {
   try {
-    console.log(req.id);
+    const user = await userServiceInstance.getUser(req.id);
+    return res.status(200).json({ message: "success", data: user });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
+export const getUserWritePosts = async (req, res, next) => {
+  try {
+    const { page } = req.query;
+
+    const user = await userServiceInstance.getUserWritePosts(req.id, page);
+    return res.status(200).json({ message: "success", data: user });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
+export const getUserWriteComments = async (req, res, next) => {
+  try {
+    const user = await userServiceInstance.getUser(req.id);
+    return res.status(200).json({ message: "success", data: user });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
+export const getUserWriteReviews = async (req, res, next) => {
+  try {
     const user = await userServiceInstance.getUser(req.id);
     return res.status(200).json({ message: "success", data: user });
   } catch (error) {

@@ -100,6 +100,6 @@ https://docs.typestack.community/typedi/usage-without-typescript/01-getting-star
 
 <br>
 
-### mongDB Projection
+### mongoDB Projection
 
 ---
