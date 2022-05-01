@@ -6,7 +6,7 @@ import Sunhan from "../models/sunhanShop";
 import Comment from "../models/comments";
 import throwError from "../utils/throwError";
 import serviceError from "../utils/serviceError";
-import { isValidObjectId } from "mongoose";
+import { isValidObjectId, Types } from "mongoose";
 
 @Service()
 export default class userService {
@@ -44,11 +44,13 @@ export default class userService {
 
       page = page ? page : 0;
 
-      const user = await this.user
+      const posts = await this.user
         .findById(userId, { writePosts: 1 })
-        .populate("writePosts", "writer content _id createAt commentCount");
+        .populate("writePosts", "writer content _id createAt commentCount")
+        .skip(page * 10)
+        .limit(10);
 
-      return user;
+      return posts;
     } catch (error) {
       console.error(error);
       throw serviceError(error);
@@ -61,12 +63,35 @@ export default class userService {
         throw throwError(400, "userId가 유효하지 않습니다.");
       }
 
-      const user = await this.user.findById(userId, {
-        email: 1,
-        nickname: 1,
-      });
+      const comments = await this.user.aggregate([
+        { $match: { _id: Types.ObjectId(userId) } },
+        {
+          $unwind: "$writeComments",
+        },
 
-      return user;
+        {
+          $lookup: {
+            from: "comments",
+            localField: "writeComments",
+            foreignField: "_id",
+            as: "writeComments",
+          },
+        },
+
+        {
+          $group: {
+            _id: "$_id",
+            postId: { $addToSet: "$writeComments.postId" },
+          },
+        },
+      ]);
+
+      const posts = await this.post.find(
+        { _id: { $in: comments[0].postId } },
+        { __v: 0, updateAt: 0, blockNumber: 0 }
+      );
+
+      return posts;
     } catch (error) {
       console.error(error);
       throw serviceError(error);
