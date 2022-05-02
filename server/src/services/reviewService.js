@@ -104,11 +104,11 @@ export default class reviewService {
   async updateReview(reviewId, updateDTO, imageUrl) {
     try {
       if (!isValidObjectId(reviewId)) {
-        throw throwError(400, "userId가 유효하지 않습니다.");
+        throw throwError(400, "reviewId가 유효하지 않습니다.");
       }
 
+      const review = await this.review.findById(reviewId);
       if (!imageUrl) {
-        const review = await this.review.findById(reviewId);
         updateDTO.imageUrl = review.imageUrl;
       } else {
         updateDTO.imageUrl = imageUrl;
@@ -116,23 +116,44 @@ export default class reviewService {
 
       updateDTO.updateAt = seoulDate();
 
-      const [updatedReview] = await Promise.all([
-        this.review.findByIdAndUpdate(reviewId, updateDTO, {
-          new: true,
-          projection: { __v: 0 },
-        }),
-        this.sunhan.updateMany(
-          {},
-          {
-            $set: {
-              "reviews.$[element].imageUrl": updateDTO.imageUrl,
-              "reviews.$[element].content": updateDTO.content,
-              "reviews.$[element].updateAt": updateDTO.updateAt,
+      let updatedReview;
+      if (updateDTO.type === "sunhan") {
+        [updatedReview] = await Promise.all([
+          this.review.findByIdAndUpdate(reviewId, updateDTO, {
+            new: true,
+            projection: { __v: 0 },
+          }),
+          this.sunhan.updateMany(
+            { _id: review.sunhanId },
+            {
+              $set: {
+                "reviews.$[element].imageUrl": updateDTO.imageUrl,
+                "reviews.$[element].content": updateDTO.content,
+                "reviews.$[element].updateAt": updateDTO.updateAt,
+              },
             },
-          },
-          { arrayFilters: [{ "element._id": reviewId }] }
-        ),
-      ]);
+            { arrayFilters: [{ "element._id": reviewId }] }
+          ),
+        ]);
+      } else if (updateDTO.type === "children") {
+        [updatedReview] = await Promise.all([
+          this.review.findByIdAndUpdate(reviewId, updateDTO, {
+            new: true,
+            projection: { __v: 0 },
+          }),
+          this.child.updateMany(
+            { _id: review.childrenId },
+            {
+              $set: {
+                "reviews.$[element].imageUrl": updateDTO.imageUrl,
+                "reviews.$[element].content": updateDTO.content,
+                "reviews.$[element].updateAt": updateDTO.updateAt,
+              },
+            },
+            { arrayFilters: [{ "element._id": reviewId }] }
+          ),
+        ]);
+      }
 
       return updatedReview;
     } catch (error) {

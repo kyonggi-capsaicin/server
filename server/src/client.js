@@ -11,12 +11,16 @@ const test = async () => {
   console.time("loading time: ");
 
   try {
-    await axios.get(`${URI}/api/posts?page=3000`, {
-      headers: {
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNGQ2MDcyYjYwZWFlNWY3OWNiZTNmMyIsIm5pY2tuYW1lIjoi7ISg7ZWcNDc2MyIsImlhdCI6MTY0OTUwNzE0MiwiZXhwIjoxNjQ5NTA4OTQyfQ.vFaPlJKN8EK7U8BSm6RW21PPizzstYwVs5uUAGYKHCU",
-      },
-    });
+    await axios.patch(
+      `${URI}/api/reviews/62692270c87758dd65537af8`,
+      { content: "수정5", type: "children" },
+      {
+        headers: {
+          Authorization:
+            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNTdmZDZiYzZmZmZlMjI4MzY4YTM2YyIsIm5pY2tuYW1lIjoi7IiY7KCV65CcIOuLieuEpOyehDMiLCJpYXQiOjE2NTE0ODI0ODQsImV4cCI6MTY1MTQ4NDI4NH0.HbIhY89kuSsKqkgXAkTEuUHmvb12jWoHff-N6zgt3GQ",
+        },
+      }
+    );
   } catch (error) {
     console.log(error);
   }
