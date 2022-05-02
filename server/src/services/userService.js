@@ -42,8 +42,6 @@ export default class userService {
         throw throwError(400, "userId가 유효하지 않습니다.");
       }
 
-      page = page ? page : 0;
-
       const posts = await this.user
         .findById(userId, { writePosts: 1 })
         .populate("writePosts", "writer content _id createAt commentCount")
@@ -57,39 +55,35 @@ export default class userService {
     }
   }
 
-  async getUserWriteComments(userId) {
+  async getUserWriteComments(userId, page) {
     try {
       if (!isValidObjectId(userId)) {
         throw throwError(400, "userId가 유효하지 않습니다.");
       }
 
-      const comments = await this.user.aggregate([
-        { $match: { _id: Types.ObjectId(userId) } },
-        {
-          $unwind: "$writeComments",
-        },
+      const comments = await this.user
+        .findById(userId, { writeComments: 1 })
+        .populate("writeComments");
 
-        {
-          $lookup: {
-            from: "comments",
-            localField: "writeComments",
-            foreignField: "_id",
-            as: "writeComments",
-          },
-        },
+      // ObjectId to String
+      let ids = comments.writeComments.map((comment) => {
+        return Types.ObjectId(comment.postId).toString();
+      });
 
-        {
-          $group: {
-            _id: "$_id",
-            postId: { $addToSet: "$writeComments.postId" },
-          },
-        },
+      // 중복제거
+      ids = Array.from(new Set(ids));
+      // String to ObjectId
+      ids = ids.map((id) => new Types.ObjectId(id));
+
+      // $in 순서 보장하지 않으므로 aggregate를 통해 순서보장
+      const posts = await this.post.aggregate([
+        { $match: { _id: { $in: ids } } },
+        { $addFields: { __order: { $indexOfArray: [ids, "$_id"] } } },
+        { $sort: { __order: 1 } },
+        { $skip: page * 10 },
+        { $limit: 10 },
+        { $project: { __v: 0, __order: 0, blockNumber: 0 } },
       ]);
-
-      const posts = await this.post.find(
-        { _id: { $in: comments[0].postId } },
-        { __v: 0, updateAt: 0, blockNumber: 0 }
-      );
 
       return posts;
     } catch (error) {
@@ -98,18 +92,24 @@ export default class userService {
     }
   }
 
-  async getUserWriteReviews(userId) {
+  async getUserWriteReviews(userId, page) {
     try {
       if (!isValidObjectId(userId)) {
         throw throwError(400, "userId가 유효하지 않습니다.");
       }
 
-      const user = await this.user.findById(userId, {
-        email: 1,
-        nickname: 1,
-      });
+      const reviews = await this.user
+        .findById(userId, {
+          writeReviews: 1,
+        })
+        .populate(
+          "writeReviews",
+          "writer _id sunhanId content imageUrl createAt"
+        )
+        .skip(page * 10)
+        .limit(10);
 
-      return user;
+      return reviews;
     } catch (error) {
       console.error(error);
       throw serviceError(error);

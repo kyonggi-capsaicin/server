@@ -15,7 +15,8 @@ export const getUser = async (req, res, next) => {
 
 export const getUserWritePosts = async (req, res, next) => {
   try {
-    const { page } = req.query;
+    let { page } = req.query;
+    page = page ? page : 0;
 
     const posts = await userServiceInstance.getUserWritePosts(req.id, page);
     return res.status(200).json({ message: "success", data: posts });
@@ -27,8 +28,14 @@ export const getUserWritePosts = async (req, res, next) => {
 
 export const getUserWriteComments = async (req, res, next) => {
   try {
-    const user = await userServiceInstance.getUserWriteComments(req.id);
-    return res.status(200).json({ message: "success", data: user });
+    let { page } = req.query;
+
+    page = page ? page : 0;
+    const comments = await userServiceInstance.getUserWriteComments(
+      req.id,
+      page
+    );
+    return res.status(200).json({ message: "success", data: comments });
   } catch (error) {
     console.error(error);
     next(error);
@@ -37,8 +44,11 @@ export const getUserWriteComments = async (req, res, next) => {
 
 export const getUserWriteReviews = async (req, res, next) => {
   try {
-    const user = await userServiceInstance.getUser(req.id);
-    return res.status(200).json({ message: "success", data: user });
+    let { page } = req.query;
+    page = page ? page : 0;
+
+    const reviews = await userServiceInstance.getUserWriteReviews(req.id, page);
+    return res.status(200).json({ message: "success", data: reviews });
   } catch (error) {
     console.error(error);
     next(error);
