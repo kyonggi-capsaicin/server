@@ -135,7 +135,7 @@ export default class childrenService {
         },
       ]);
 
-      return childrenShop;
+      return childrenShop[0];
     } catch (error) {
       console.error(error);
       throw serviceError(error);

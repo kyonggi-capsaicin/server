@@ -131,7 +131,7 @@ export default class sunhanService {
         },
       ]);
 
-      return sunhan;
+      return sunhan[0];
     } catch (error) {
       console.error(error);
       throw serviceError(error);

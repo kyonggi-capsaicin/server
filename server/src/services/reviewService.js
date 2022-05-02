@@ -1,5 +1,4 @@
-import { Service, Container } from "typedi";
-import sunhanService from "./sunhanService";
+import { Service } from "typedi";
 import Review from "../models/reviews";
 import User from "../models/users";
 import Sunhan from "../models/sunhanShop";
@@ -11,7 +10,6 @@ import { isValidObjectId } from "mongoose";
 import seoulDate from "../utils/seoulDate";
 import logger from "../config/logger";
 
-const sunhanServiceInstance = Container.get(sunhanService);
 @Service()
 export default class reviewService {
   constructor() {
@@ -184,7 +182,7 @@ export default class reviewService {
     }
   }
 
-  async deleteReview(userId, reviewId) {
+  async deleteReview(userId, reviewId, type) {
     try {
       if (!isValidObjectId(userId)) {
         throw throwError(400, "userId가 유효하지 않습니다.");
@@ -196,36 +194,73 @@ export default class reviewService {
 
       const review = await this.review.findById(reviewId);
 
-      const sunhan = await sunhanServiceInstance.getSunhan(review.sunhanId);
+      if (type === "sunhan") {
+        const sunhan = await this.sunhan.findById(review.sunhanId);
 
-      // sunhan reviews fields의 삭제하려는 리뷰가 있다면
-      if (sunhan.reviews.find((review) => review.id === reviewId)) {
-        // sunhan reviews fields를 filter를 이용해 삭제하려는 리뷰를 제거한 새로운 배열을 만든다
-        sunhan.reviews = sunhan.reviews.filter(
-          (review) => review.id !== reviewId
-        );
+        // sunhan reviews fields의 삭제하려는 리뷰가 있다면
+        if (sunhan.reviews.find((review) => review.id === reviewId)) {
+          // sunhan reviews fields를 filter를 이용해 삭제하려는 리뷰를 제거한 새로운 배열을 만든다
+          console.log(reviewId, "reviewId");
+          sunhan.reviews = sunhan.reviews.filter(
+            (review) => review.id !== reviewId
+          );
 
-        // 새로운 reviews 배열이 0보다 크다면
-        if (sunhan.reviews.length > 0) {
-          const newReview = await this.review
-            .findOne({
-              _id: { $lt: sunhan.reviews[0].id },
-            })
-            .sort({ _id: -1 });
+          console.log("first", sunhan.reviews);
+          // 새로운 reviews 배열이 0보다 크다면
+          if (sunhan.reviews.length > 0) {
+            const newReview = await this.review
+              .findOne({
+                _id: { $lt: sunhan.reviews[0].id },
+              })
+              .sort({ _id: -1 });
 
-          if (newReview && newReview.id !== reviewId) {
-            sunhan.reviews.unshift(newReview);
+            if (newReview && newReview.id !== reviewId) {
+              sunhan.reviews.unshift(newReview);
+            }
+          }
+
+          console.log("second", sunhan.reviews);
+        }
+
+        await Promise.all([
+          sunhan.save(),
+          this.user.findByIdAndUpdate(userId, {
+            $pull: { writeReviews: reviewId },
+          }),
+          this.review.findByIdAndDelete(reviewId),
+        ]);
+      } else if (type === "children") {
+        const childrenShop = await this.child.findById(review.childrenId);
+
+        // sunhan reviews fields의 삭제하려는 리뷰가 있다면
+        if (childrenShop.reviews.find((review) => review.id === reviewId)) {
+          // sunhan reviews fields를 filter를 이용해 삭제하려는 리뷰를 제거한 새로운 배열을 만든다
+          childrenShop.reviews = childrenShop.reviews.filter(
+            (review) => review.id !== reviewId
+          );
+
+          // 새로운 reviews 배열이 0보다 크다면
+          if (childrenShop.reviews.length > 0) {
+            const newReview = await this.review
+              .findOne({
+                _id: { $lt: childrenShop.reviews[0].id },
+              })
+              .sort({ _id: -1 });
+
+            if (newReview && newReview.id !== reviewId) {
+              childrenShop.reviews.unshift(newReview);
+            }
           }
         }
-      }
 
-      await Promise.all([
-        sunhan.save(),
-        this.user.findByIdAndUpdate(userId, {
-          $pull: { writeReviews: reviewId },
-        }),
-        this.review.findByIdAndDelete(reviewId),
-      ]);
+        await Promise.all([
+          childrenShop.save(),
+          this.user.findByIdAndUpdate(userId, {
+            $pull: { writeReviews: reviewId },
+          }),
+          this.review.findByIdAndDelete(reviewId),
+        ]);
+      }
     } catch (error) {
       console.error(error);
       throw serviceError(error);
