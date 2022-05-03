@@ -42,11 +42,26 @@ export default class userService {
         throw throwError(400, "userId가 유효하지 않습니다.");
       }
 
-      const posts = await this.user
-        .findById(userId, { writePosts: 1 })
-        .populate("writePosts", "writer content _id createAt commentCount")
-        .skip(page * 10)
-        .limit(10);
+      let posts = await this.user
+        .findById(userId, {
+          address: 0,
+          nickname: 0,
+          avatarUrl: 0,
+          email: 0,
+          scrapSunhan: 0,
+          scrapChild: 0,
+          blockPosts: 0,
+          blockReviews: 0,
+          blockComments: 0,
+          naverId: 0,
+          blockUsers: 0,
+          childCard: 0,
+          __v: 0,
+          writeReviews: 0,
+          writeComments: 0,
+          writePosts: { $slice: [page * 10, page * 10 + 10] },
+        })
+        .populate("writePosts");
 
       return posts;
     } catch (error) {
