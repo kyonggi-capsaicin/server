@@ -42,7 +42,7 @@ export default class userService {
         throw throwError(400, "userId가 유효하지 않습니다.");
       }
 
-      let posts = await this.user
+      const posts = await this.user
         .findById(userId, {
           address: 0,
           nickname: 0,
@@ -113,16 +113,37 @@ export default class userService {
         throw throwError(400, "userId가 유효하지 않습니다.");
       }
 
+      // const reviews = await this.user
+      //   .findById(userId, {
+      //     writeReviews: 1,
+      //   })
+      //   .populate(
+      //     "writeReviews",
+      //     "writer _id sunhanId content imageUrl createAt"
+      //   )
+      //   .skip(page * 10)
+      //   .limit(10);
+
       const reviews = await this.user
         .findById(userId, {
-          writeReviews: 1,
+          address: 0,
+          nickname: 0,
+          avatarUrl: 0,
+          email: 0,
+          scrapSunhan: 0,
+          scrapChild: 0,
+          blockPosts: 0,
+          blockReviews: 0,
+          blockComments: 0,
+          naverId: 0,
+          blockUsers: 0,
+          childCard: 0,
+          __v: 0,
+          writePosts: 0,
+          writeComments: 0,
+          writeReviews: { $slice: [page * 10, page * 10 + 10] },
         })
-        .populate(
-          "writeReviews",
-          "writer _id sunhanId content imageUrl createAt"
-        )
-        .skip(page * 10)
-        .limit(10);
+        .populate("writeReviews");
 
       return reviews;
     } catch (error) {
