@@ -84,7 +84,7 @@ export const kakaoLogin = async (req, res, next) => {
       AccessToken
     );
 
-    const user = await authServiceInstance.exUser(id, "kakao");
+    user = await authServiceInstance.exUser(id, "kakao");
     if (!user) {
       user = await authServiceInstance.createUser(email, id, "naver");
     }
