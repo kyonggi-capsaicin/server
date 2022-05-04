@@ -86,7 +86,7 @@ export const kakaoLogin = async (req, res, next) => {
 
     user = await authServiceInstance.exUser(id, "kakao");
     if (!user) {
-      user = await authServiceInstance.createUser(email, id, "naver");
+      user = await authServiceInstance.createUser(email, id, "kakao");
     }
 
     // jwt 발급
@@ -130,7 +130,7 @@ export const googleLogin = async (req, res, next) => {
     user = await authServiceInstance.exUser(id, "google");
 
     if (!user) {
-      user = await authServiceInstance.createUser(email, id, "naver");
+      user = await authServiceInstance.createUser(email, id, "google");
     }
 
     // jwt 발급
