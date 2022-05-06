@@ -4,6 +4,7 @@ import { upload } from "../middlewares/imageUpload";
 
 import {
   getUser,
+  getBlockUserList,
   getUserWritePosts,
   getUserWriteComments,
   getUserWriteReviews,
@@ -18,6 +19,9 @@ const userRouter = express.Router();
 
 // 유저 정보 가져오기
 userRouter.get("/", authJWT, getUser);
+
+// 유저 차단 목록 가져오기
+userRouter.get("/block", authJWT, getBlockUserList);
 
 // 유저가 쓴 커뮤니티 게시글 가져오기
 userRouter.get("/posts", authJWT, getUserWritePosts);

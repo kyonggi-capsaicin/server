@@ -37,6 +37,25 @@ export default class userService {
     }
   }
 
+  async getBlockUserList(userId) {
+    try {
+      if (!isValidObjectId(userId)) {
+        throw throwError(400, "userId가 유효하지 않습니다.");
+      }
+
+      const user = await this.user
+        .findById(userId, {
+          blockUsers: 1,
+        })
+        .populate("blockUsers");
+
+      return user;
+    } catch (error) {
+      console.error(error);
+      throw serviceError(error);
+    }
+  }
+
   async getUserWritePosts(userId, page) {
     try {
       if (!isValidObjectId(userId)) {

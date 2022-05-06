@@ -13,6 +13,16 @@ export const getUser = async (req, res, next) => {
   }
 };
 
+export const getBlockUserList = async (req, res, next) => {
+  try {
+    const userBlockList = await userServiceInstance.getBlockUserList(req.id);
+    return res.status(200).json({ success: true, data: userBlockList });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
 export const getUserWritePosts = async (req, res, next) => {
   try {
     let { page } = req.query;
