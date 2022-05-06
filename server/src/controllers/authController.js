@@ -49,7 +49,7 @@ export const naverLogin = async (req, res, next) => {
 
     res
       .status(200)
-      .json({ success: true, data: { accessToken, refreshToken } });
+      .json({ message: "success", data: { accessToken, refreshToken } });
   } catch (error) {
     console.error(error);
     next(error);
@@ -96,7 +96,7 @@ export const kakaoLogin = async (req, res, next) => {
     await redisClient.set(user.id, refreshToken);
     res
       .status(200)
-      .json({ success: true, data: { accessToken, refreshToken } });
+      .json({ message: "success", data: { accessToken, refreshToken } });
   } catch (error) {
     console.error(error);
     next(error);
@@ -140,7 +140,7 @@ export const googleLogin = async (req, res, next) => {
     await redisClient.set(user.id, refreshToken);
     res
       .status(200)
-      .json({ success: true, data: { accessToken, refreshToken } });
+      .json({ message: "success", data: { accessToken, refreshToken } });
   } catch (error) {
     console.error(error);
     next(error);
@@ -186,7 +186,7 @@ export const getRefresh = async (req, res, next) => {
 
           res.status(200).json({
             // 새로 발급한 access token과 원래 있던 refresh token 모두 클라이언트에게 반환합니다.
-            success: true,
+            message: "success",
             data: {
               accessToken: newAccessToken,
               refreshToken,
