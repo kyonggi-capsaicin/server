@@ -27,6 +27,7 @@ export default class userService {
       const user = await this.user.findById(userId, {
         email: 1,
         nickname: 1,
+        avatarUrl: 1,
       });
 
       return user;
