@@ -21,18 +21,6 @@ export const getAllPostComments = async (req, res, next) => {
   }
 };
 
-export const getComment = async (req, res, next) => {
-  try {
-    const { id: commentId } = req.params;
-
-    const comment = await commentServiceInstance.getComment(commentId);
-    return res.status(200).json({ message: "success", data: comment });
-  } catch (error) {
-    console.error(error);
-    next(error);
-  }
-};
-
 export const createPostParentComment = async (req, res, next) => {
   try {
     const { postId } = req.body;

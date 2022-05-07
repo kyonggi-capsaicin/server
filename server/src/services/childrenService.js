@@ -15,7 +15,7 @@ export default class childrenService {
 
   async getAllChildrenShop(userId, query) {
     try {
-      let { page, category, sort } = query;
+      let { page, sort } = query;
       page = page ? page : 0;
 
       const variable = sort === "name" ? { name: 1 } : {};
@@ -29,7 +29,6 @@ export default class childrenService {
       const childrenShops = await this.child
         .find(
           {
-            category: category,
             location: {
               $nearSphere: {
                 $geometry: {
@@ -65,7 +64,7 @@ export default class childrenService {
 
   async getAllChildrenShopGuest(query) {
     try {
-      let { page, category, sort, lat, lng } = query;
+      let { page, sort, lat, lng } = query;
       page = page ? page : 0;
 
       const variable = sort === "name" ? { name: 1 } : {};
@@ -73,7 +72,6 @@ export default class childrenService {
       const childrenShops = await this.child
         .find(
           {
-            category: category,
             location: {
               $nearSphere: {
                 $geometry: {

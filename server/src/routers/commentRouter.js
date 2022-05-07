@@ -3,7 +3,6 @@ import authJWT from "../middlewares/authJWT";
 
 import {
   getAllPostComments,
-  getComment,
   createPostComment,
   createPostParentComment,
   updateComment,
@@ -15,8 +14,6 @@ import {
 const commentRouter = express.Router();
 
 commentRouter.get("/:id/post", getAllPostComments);
-
-commentRouter.get("/:id", getComment);
 
 commentRouter.post("/post", authJWT, createPostComment);
 

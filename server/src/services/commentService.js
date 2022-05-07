@@ -25,26 +25,12 @@ export default class commentService {
       }
 
       const comments = await this.comment
-        .find({ postId }, { __v: 0 })
+        .find({ postId }, { __v: 0, blockNumber: 0, postId: 0 })
         .sort({ _id: 1 })
         .skip(page * 10)
         .limit(10);
 
       return comments;
-    } catch (error) {
-      console.error(error);
-      throw serviceError(error);
-    }
-  }
-
-  async getComment(commentId) {
-    try {
-      if (!isValidObjectId(commentId)) {
-        throw throwError(400, "commentId가 유효하지 않습니다.");
-      }
-
-      const comment = await this.comment.findById(commentId, { __v: 0 });
-      return comment;
     } catch (error) {
       console.error(error);
       throw serviceError(error);
@@ -203,15 +189,6 @@ export default class commentService {
           }),
         ]);
       } else {
-        // await Promise.all([
-        //   this.post.findByIdAndUpdate(comment.postId, {
-        //     $inc: { commentCount: -1 },
-        //   }),
-        //   this.comment.findByIdAndDelete(commentId),
-        //   this.user.findByIdAndUpdate(userId, {
-        //     $pull: { writeComments: commentId },
-        //   }),
-        // ]);
         await this.deletePostComment(userId, commentId);
       }
     } catch (error) {
