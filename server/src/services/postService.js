@@ -82,7 +82,7 @@ export default class postService {
   async updatePost(postId, updateDTO) {
     try {
       if (!isValidObjectId(postId)) {
-        throw throwError(400, "userId가 유효하지 않습니다.");
+        throw throwError(400, "postId가 유효하지 않습니다.");
       }
 
       updateDTO.updateAt = seoulDate();

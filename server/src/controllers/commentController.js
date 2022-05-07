@@ -3,14 +3,6 @@ import commentService from "../services/commentService";
 
 const commentServiceInstance = Container.get(commentService);
 
-export const getAllReviewComments = async (req, res, next) => {
-  try {
-  } catch (error) {
-    console.error(error);
-    next(error);
-  }
-};
-
 export const getAllPostComments = async (req, res, next) => {
   try {
     let { page } = req.query;
@@ -41,23 +33,6 @@ export const getComment = async (req, res, next) => {
   }
 };
 
-export const createReviewParentComment = async (req, res, next) => {
-  try {
-    const { postId } = req.body;
-
-    const comment = await commentServiceInstance.createPostComment(
-      req.id,
-      postId,
-      req.body
-    );
-
-    return res.status(200).json({ message: "success", data: comment });
-  } catch (error) {
-    console.error(error);
-    next(error);
-  }
-};
-
 export const createPostParentComment = async (req, res, next) => {
   try {
     const { postId } = req.body;
@@ -65,23 +40,6 @@ export const createPostParentComment = async (req, res, next) => {
     const comment = await commentServiceInstance.createPostParentComment(
       req.id,
       postId,
-      req.body
-    );
-
-    return res.status(200).json({ message: "success", data: comment });
-  } catch (error) {
-    console.error(error);
-    next(error);
-  }
-};
-
-export const createReviewComment = async (req, res, next) => {
-  try {
-    const { reviewId, parentId } = req.body;
-
-    const comment = await commentServiceInstance.createReviewComment(
-      req.id,
-      reviewId,
       req.body
     );
 
@@ -138,30 +96,12 @@ export const blockComment = async (req, res, next) => {
   }
 };
 
-export const deleteParentReviewComment = async (req, res, next) => {
-  try {
-    const { id: commentId } = req.params;
-  } catch (error) {
-    console.error(error);
-    next(error);
-  }
-};
-
 export const deleteParentPostComment = async (req, res, next) => {
   try {
     const { id: commentId } = req.params;
     await commentServiceInstance.deleteParentPostComment(req.id, commentId);
 
     return res.status(200).json({ message: "success" });
-  } catch (error) {
-    console.error(error);
-    next(error);
-  }
-};
-
-export const deleteReviewComment = async (req, res, next) => {
-  try {
-    const { id: commentId } = req.params;
   } catch (error) {
     console.error(error);
     next(error);

@@ -45,7 +45,6 @@ export const updateReview = async (req, res, next) => {
     }
 
     const { id: reviewId } = req.params;
-    console.log(reviewId);
 
     const post = await reviewServiceInstance.updateReview(
       reviewId,
