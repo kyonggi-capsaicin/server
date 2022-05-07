@@ -42,6 +42,8 @@ export default class reviewService {
           .sort({ _id: -1 })
           .skip(page * 10)
           .limit(10);
+      } else {
+        throw throwError(400, "해당 type가 존재하지 않습니다.");
       }
 
       return reviews;
@@ -260,6 +262,8 @@ export default class reviewService {
           }),
           this.review.findByIdAndDelete(reviewId),
         ]);
+      } else {
+        throw throwError(400, "해당 type가 존재하지 않습니다.");
       }
     } catch (error) {
       console.error(error);

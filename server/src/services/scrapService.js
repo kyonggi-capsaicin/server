@@ -11,7 +11,7 @@ export default class scrapService {
     this.user = User;
   }
 
-  async getScraps(userId, type) {
+  async getScraps(userId, type = "sunhan") {
     try {
       if (!isValidObjectId(userId)) {
         throw throwError(400, "userId가 유효하지 않습니다.");
@@ -21,11 +21,19 @@ export default class scrapService {
       if (type === "sunhan") {
         scraps = await this.user
           .findById(userId, { scrapSunhan: 1, _id: 0 })
-          .populate("scrapSunhan");
+          .populate(
+            "scrapSunhan",
+            "name openingHours address tatget offer category"
+          );
       } else if (type === "children") {
         scraps = await this.user
           .findById(userId, { scrapChild: 1, _id: 0 })
-          .populate("scrapChild");
+          .populate(
+            "scrapChild",
+            "name address phoneNumber weekdayStartTime weekdayEndTime weekendStartTime weekendEndTime holydayStartTime holydayEndTime"
+          );
+      } else {
+        throw throwError(400, "해당 type가 존재하지 않습니다.");
       }
 
       return scraps;
@@ -53,6 +61,8 @@ export default class scrapService {
         await this.user.findByIdAndUpdate(userId, {
           $addToSet: { scrapChild: shopId },
         });
+      } else {
+        throw throwError(400, "해당 type가 존재하지 않습니다.");
       }
     } catch (error) {
       console.error(error);
@@ -78,6 +88,8 @@ export default class scrapService {
         await this.user.findByIdAndUpdate(userId, {
           $pull: { scrapChild: shopId },
         });
+      } else {
+        throw throwError(400, "해당 type가 존재하지 않습니다.");
       }
     } catch (error) {
       console.error(error);

@@ -282,6 +282,8 @@ export default class dataService {
       } catch (error) {
         console.error(error);
       }
+    } else {
+      throw throwError(400, "해당 type가 존재하지 않습니다.");
     }
   }
 }

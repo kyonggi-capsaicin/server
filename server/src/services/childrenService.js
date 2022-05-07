@@ -20,7 +20,7 @@ export default class childrenService {
 
       const variable = sort === "name" ? { name: 1 } : {};
 
-      if (!isValidObjectId(userId)) {
+      if (!mongoose.isValidObjectId(userId)) {
         throw throwError(400, "userId가 유효하지 않습니다.");
       }
 
@@ -146,7 +146,7 @@ export default class childrenService {
     try {
       const { name, page } = query;
 
-      if (!isValidObjectId(userId)) {
+      if (!mongoose.isValidObjectId(userId)) {
         throw throwError(400, "userId가 유효하지 않습니다.");
       }
 
