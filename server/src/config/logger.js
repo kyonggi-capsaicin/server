@@ -13,7 +13,7 @@ const printLogFormat = {
       label: "sunhan",
     }),
     timestamp({
-      format: "YYYY-MM-DD HH:mm:dd",
+      format: "YYYY-MM-DD HH:mm:ss",
     }),
     printFormat
   ),

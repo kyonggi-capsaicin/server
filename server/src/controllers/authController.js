@@ -51,7 +51,6 @@ export const naverLogin = async (req, res, next) => {
       .status(200)
       .json({ message: "success", data: { accessToken, refreshToken } });
   } catch (error) {
-    console.error(error);
     next(error);
   }
 };
@@ -65,6 +64,7 @@ export const kakaoLogin = async (req, res, next) => {
     }
 
     const AccessToken = req.headers.authorization.split("Bearer ")[1];
+    logger.info("Verify kakao AccessToken");
     const result = await authServiceInstance.thirdPartyTokenApi(
       "https://kapi.kakao.com/v1/user/access_token_info",
       AccessToken
@@ -74,6 +74,7 @@ export const kakaoLogin = async (req, res, next) => {
       return next(throwError(400, "accessToken이 유효하지 않습니다."));
     }
 
+    logger.info("Creating User Info using Kakao API");
     const {
       data: {
         id,
@@ -84,21 +85,24 @@ export const kakaoLogin = async (req, res, next) => {
       AccessToken
     );
 
+    logger.info("Finding Exist User");
     user = await authServiceInstance.exUser(id, "kakao");
     if (!user) {
       user = await authServiceInstance.createUser(email, id, "kakao");
     }
 
+    logger.info("Generating JWT");
     // jwt 발급
     const accessToken = sign(user);
     const refreshToken = refresh();
 
     await redisClient.set(user.id, refreshToken);
+
+    logger.info(`GET /users/kakao 200 Response: "success: true"`);
     res
       .status(200)
       .json({ message: "success", data: { accessToken, refreshToken } });
   } catch (error) {
-    console.error(error);
     next(error);
   }
 };
@@ -112,6 +116,7 @@ export const googleLogin = async (req, res, next) => {
     }
 
     const AccessToken = req.headers.authorization.split("Bearer ")[1];
+    logger.info("Verify google AccessToken");
     const result = await authServiceInstance.thirdPartyTokenApi(
       `https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${AccessToken}`
     );
@@ -120,6 +125,7 @@ export const googleLogin = async (req, res, next) => {
       return next(throwError(400, "accessToken이 유효하지 않습니다."));
     }
 
+    logger.info("Creating User Info using Kakao API");
     const {
       data: { email, id },
     } = await authServiceInstance.thirdPartyTokenApi(
@@ -127,22 +133,24 @@ export const googleLogin = async (req, res, next) => {
       AccessToken
     );
 
+    logger.info("Finding Exist User");
     user = await authServiceInstance.exUser(id, "google");
-
     if (!user) {
       user = await authServiceInstance.createUser(email, id, "google");
     }
 
+    logger.info("Generating JWT");
     // jwt 발급
     const accessToken = sign(user);
     const refreshToken = refresh();
 
     await redisClient.set(user.id, refreshToken);
+
+    logger.info(`GET /users/google 200 Response: "success: true"`);
     res
       .status(200)
       .json({ message: "success", data: { accessToken, refreshToken } });
   } catch (error) {
-    console.error(error);
     next(error);
   }
 };
@@ -154,6 +162,7 @@ export const getRefresh = async (req, res, next) => {
       const accessToken = req.headers.authorization.split("Bearer ")[1];
       const refreshToken = req.headers.refresh;
 
+      logger.info("Verify AccessToken in /refresh");
       // access token 검증 -> expired여야 함.
       const accessResult = verify(accessToken);
       console.log(accessResult);
@@ -166,6 +175,7 @@ export const getRefresh = async (req, res, next) => {
         return next(throwError(401, "권한이 없습니다."));
       }
 
+      logger.info("Verify RccessToken in /refresh");
       /* access token의 decoding 된 값에서
       유저의 id를 가져와 refresh token을 검증합니다. */
       const refreshResult = await refreshVerify(refreshToken, decoded.id);
@@ -202,7 +212,6 @@ export const getRefresh = async (req, res, next) => {
       return next(throwError(400, "Access token, refresh token이 필요합니다."));
     }
   } catch (error) {
-    console.error(error);
     next(error);
   }
 };

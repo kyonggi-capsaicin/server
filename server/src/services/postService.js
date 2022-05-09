@@ -19,6 +19,7 @@ export default class postService {
 
   async getAllPosts(page) {
     try {
+      logger.info("Finding All Posts in getAllPosts");
       const posts = await this.post
         .find({}, { __v: 0, blockNumber: 0 })
         .sort({ _id: -1 })
@@ -27,7 +28,6 @@ export default class postService {
 
       return posts;
     } catch (error) {
-      console.error(error.message);
       throw serviceError(error);
     }
   }
@@ -38,10 +38,14 @@ export default class postService {
         throw throwError(400, "postId가 유효하지 않습니다.");
       }
 
+      logger.info("Finding Post in getPost");
       const post = await this.post.findById(postId, { __v: 0, blockNumber: 0 });
+      if (!post) {
+        throw throwError(400, "해당하는 post가 존재하지 않습니다.");
+      }
+
       return post;
     } catch (error) {
-      console.error(error);
       throw serviceError(error);
     }
   }
@@ -52,12 +56,14 @@ export default class postService {
         throw throwError(400, "userId가 유효하지 않습니다.");
       }
 
+      logger.info("Finding User in createPost");
       const user = await this.user.findById(userId);
 
       postDTO.writer = user;
       postDTO.createAt = seoulDate();
       postDTO.updateAt = seoulDate();
 
+      logger.info("Creating Post in createPost");
       const newPost = new this.post(postDTO);
 
       const [post] = await Promise.all([
@@ -74,7 +80,6 @@ export default class postService {
 
       return postWithoutVersion;
     } catch (error) {
-      console.error(error.message);
       throw serviceError(error);
     }
   }
@@ -87,6 +92,7 @@ export default class postService {
 
       updateDTO.updateAt = seoulDate();
 
+      logger.info("Updating Post in updatePost");
       const updatedPost = await this.post.findByIdAndUpdate(postId, updateDTO, {
         new: true,
         projection: { __v: 0, blockNumber: 0 },
@@ -94,7 +100,6 @@ export default class postService {
 
       return updatedPost;
     } catch (error) {
-      console.error(error);
       throw serviceError(error);
     }
   }
@@ -105,6 +110,7 @@ export default class postService {
         throw throwError(400, "userId가 유효하지 않습니다.");
       }
 
+      logger.info("Block Post in blockPost");
       await Promise.all([
         this.post.findByIdAndUpdate(postId, { $inc: { blockNumber: 1 } }),
         this.user.findByIdAndUpdate(userId, {
@@ -112,7 +118,6 @@ export default class postService {
         }),
       ]);
     } catch (error) {
-      console.error(error);
       throw serviceError(error);
     }
   }
@@ -131,6 +136,7 @@ export default class postService {
 
       const commentIdArr = comments.map((comment) => comment._id);
 
+      logger.info("Delete Post, Comments in deletePost");
       await Promise.all([
         // 게시글 삭제
         this.post.findByIdAndDelete(postId),
@@ -147,7 +153,6 @@ export default class postService {
         this.comment.deleteMany({ postId }),
       ]);
     } catch (error) {
-      console.error(error);
       throw serviceError(error);
     }
   }

@@ -24,8 +24,10 @@ export default class sunhanService {
         throw throwError(400, "userId가 유효하지 않습니다.");
       }
 
+      logger.info("Finding User in getAllSunhan");
       const user = await this.user.findById(userId);
 
+      logger.info("Finding All Sunhans in getAllSunhan");
       const sunhans = await this.sunhan
         .find(
           {
@@ -56,7 +58,6 @@ export default class sunhanService {
 
       return sunhans;
     } catch (error) {
-      console.error(error);
       throw serviceError(error);
     }
   }
@@ -71,6 +72,7 @@ export default class sunhanService {
 
       const variable = sort === "name" ? { name: 1 } : {};
 
+      logger.info("Finding All Sunhans in getAllSunhanGuest");
       const sunhans = await this.sunhan
         .find(
           {
@@ -101,7 +103,6 @@ export default class sunhanService {
 
       return sunhans;
     } catch (error) {
-      console.error(error);
       throw serviceError(error);
     }
   }
@@ -112,6 +113,7 @@ export default class sunhanService {
         throw throwError(400, "sunhanId가 유효하지 않습니다.");
       }
 
+      logger.info("Finding Sunhan in getSunhan");
       const sunhan = await this.sunhan.aggregate([
         { $match: { _id: mongoose.Types.ObjectId(sunhanId) } },
         { $unwind: "$reviews" },
@@ -133,7 +135,6 @@ export default class sunhanService {
 
       return sunhan[0];
     } catch (error) {
-      console.error(error);
       throw serviceError(error);
     }
   }
@@ -147,8 +148,10 @@ export default class sunhanService {
         throw throwError(400, "userId가 유효하지 않습니다.");
       }
 
+      logger.info("Finding User in getSearchSunhan");
       const user = await this.user.findById(userId);
 
+      logger.info("Searching Sunhans in getSearchSunhan");
       const sunhans = await this.sunhan
         .find(
           {
@@ -171,7 +174,6 @@ export default class sunhanService {
 
       return sunhans;
     } catch (error) {
-      console.error(error);
       throw serviceError(error);
     }
   }
@@ -181,6 +183,7 @@ export default class sunhanService {
       let { lat, lng, name, page } = query;
       page = page ? page : 0;
 
+      logger.info("Searching Sunhans in getSearchSunhanGuest");
       const sunhans = await this.sunhan
         .find(
           {
@@ -210,7 +213,6 @@ export default class sunhanService {
 
       return sunhans;
     } catch (error) {
-      console.error(error);
       throw serviceError(error);
     }
   }
@@ -223,7 +225,6 @@ export default class sunhanService {
         .distinct("detailCategory");
       return { category, detailCategory };
     } catch (error) {
-      console.error(error);
       throw serviceError(error);
     }
   }

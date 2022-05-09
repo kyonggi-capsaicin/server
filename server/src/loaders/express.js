@@ -1,6 +1,7 @@
 import "reflect-metadata";
 import express from "express";
 import morgan from "morgan";
+import logger from "../config/logger";
 
 import dataRouter from "../routers/dataRouter";
 import postRouter from "../routers/postRouter";
@@ -49,15 +50,24 @@ export default (app) => {
     /**
      * Handle 401 thrown by express-jwt library
      */
+
     if (err.name === "UnauthorizedError") {
+      logger.error(
+        `${res.req.method} ${res.req.url}  Response: "success: false, msg: ${err.message}"`
+      );
       return res.status(err.status).send({ message: err.message }).end();
     }
     return next(err);
   });
 
   app.use((err, req, res, next) => {
-    console.log(err.status);
     res.status(err.status || 500);
+    if (process.env.NODE_ENV === "dev") {
+      console.error(err);
+    }
+    logger.error(
+      `${res.req.method} ${res.req.url} ${err.status} Response: "success: false, msg: ${err.message}"`
+    );
     res.json({
       errors: {
         message: err.message,

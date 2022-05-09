@@ -24,8 +24,10 @@ export default class childrenService {
         throw throwError(400, "userId가 유효하지 않습니다.");
       }
 
+      logger.info("Finding User in getAllChildrenShop");
       const user = await this.user.findById(userId);
 
+      logger.info("Finding childrenShops in getAllChildrenShop");
       const childrenShops = await this.child
         .find(
           {
@@ -57,7 +59,6 @@ export default class childrenService {
 
       return childrenShops;
     } catch (error) {
-      console.error(error);
       throw serviceError(error);
     }
   }
@@ -69,6 +70,7 @@ export default class childrenService {
 
       const variable = sort === "name" ? { name: 1 } : {};
 
+      logger.info("Finding childrenShops in getAllChildrenShopGuest");
       const childrenShops = await this.child
         .find(
           {
@@ -100,7 +102,6 @@ export default class childrenService {
 
       return childrenShops;
     } catch (error) {
-      console.error(error);
       throw serviceError(error);
     }
   }
@@ -111,6 +112,7 @@ export default class childrenService {
         throw throwError(400, "childrenShopId가 유효하지 않습니다.");
       }
 
+      logger.info("Finding childrenShop in getChildrenShop");
       const childrenShop = await this.child.aggregate([
         { $match: { _id: mongoose.Types.ObjectId(childrenShopId) } },
         { $unwind: "$reviews" },
@@ -135,7 +137,6 @@ export default class childrenService {
 
       return childrenShop[0];
     } catch (error) {
-      console.error(error);
       throw serviceError(error);
     }
   }
@@ -148,8 +149,10 @@ export default class childrenService {
         throw throwError(400, "userId가 유효하지 않습니다.");
       }
 
+      logger.info("Finding User in getSearchChildrenShop");
       const user = await this.user.findById(userId);
 
+      logger.info("Finding childrenShops in getSearchChildrenShop");
       const childrenShops = await this.child
         .find(
           {
@@ -181,7 +184,6 @@ export default class childrenService {
 
       return childrenShops;
     } catch (error) {
-      console.error(error);
       throw serviceError(error);
     }
   }
@@ -190,6 +192,7 @@ export default class childrenService {
     try {
       const { name, page, lat, lng } = query;
 
+      logger.info("Finding childrenShops in getSearchChildrenShopGuest");
       const childrenShops = await this.child
         .find(
           {
@@ -221,7 +224,6 @@ export default class childrenService {
 
       return childrenShops;
     } catch (error) {
-      console.error(error);
       throw serviceError(error);
     }
   }
@@ -232,7 +234,6 @@ export default class childrenService {
       const detailCategory = await this.child.find().distinct("detailCategory");
       return { category, detailCategory };
     } catch (error) {
-      console.error(error);
       throw serviceError(error);
     }
   }

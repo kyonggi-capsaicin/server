@@ -7,6 +7,7 @@ import Comment from "../models/comments";
 import throwError from "../utils/throwError";
 import serviceError from "../utils/serviceError";
 import { isValidObjectId, Types } from "mongoose";
+import logger from "../config/logger";
 
 @Service()
 export default class userService {
@@ -24,6 +25,7 @@ export default class userService {
         throw throwError(400, "userId가 유효하지 않습니다.");
       }
 
+      logger.info("Finding User in getUser");
       const user = await this.user.findById(userId, {
         email: 1,
         nickname: 1,
@@ -32,7 +34,6 @@ export default class userService {
 
       return user;
     } catch (error) {
-      console.error(error);
       throw serviceError(error);
     }
   }
@@ -43,6 +44,7 @@ export default class userService {
         throw throwError(400, "userId가 유효하지 않습니다.");
       }
 
+      logger.info("Finding Block Users List in getBlockUserList");
       const user = await this.user
         .findById(userId, {
           blockUsers: 1,
@@ -51,7 +53,6 @@ export default class userService {
 
       return user;
     } catch (error) {
-      console.error(error);
       throw serviceError(error);
     }
   }
@@ -62,6 +63,7 @@ export default class userService {
         throw throwError(400, "userId가 유효하지 않습니다.");
       }
 
+      logger.info("Finding Posts that user wrote in getUserWritePosts");
       const posts = await this.user
         .findById(userId, {
           address: 0,
@@ -85,7 +87,6 @@ export default class userService {
 
       return posts;
     } catch (error) {
-      console.error(error);
       throw serviceError(error);
     }
   }
@@ -96,6 +97,7 @@ export default class userService {
         throw throwError(400, "userId가 유효하지 않습니다.");
       }
 
+      logger.info("Finding Comments that user wrote in getUserWriteComments");
       const comments = await this.user
         .findById(userId, { writeComments: 1 })
         .populate("writeComments");
@@ -110,6 +112,9 @@ export default class userService {
       // String to ObjectId
       ids = ids.map((id) => new Types.ObjectId(id));
 
+      logger.info(
+        "Finding Post that user wrote Comments in getUserWriteComments"
+      );
       // $in 순서 보장하지 않으므로 aggregate를 통해 순서보장
       const posts = await this.post.aggregate([
         { $match: { _id: { $in: ids } } },
@@ -122,7 +127,6 @@ export default class userService {
 
       return posts;
     } catch (error) {
-      console.error(error);
       throw serviceError(error);
     }
   }
@@ -133,17 +137,7 @@ export default class userService {
         throw throwError(400, "userId가 유효하지 않습니다.");
       }
 
-      // const reviews = await this.user
-      //   .findById(userId, {
-      //     writeReviews: 1,
-      //   })
-      //   .populate(
-      //     "writeReviews",
-      //     "writer _id sunhanId content imageUrl createAt"
-      //   )
-      //   .skip(page * 10)
-      //   .limit(10);
-
+      logger.info("Finding Reviews that user wrote in getUserWriteReviews");
       const reviews = await this.user
         .findById(userId, {
           address: 0,
@@ -167,16 +161,15 @@ export default class userService {
 
       return reviews;
     } catch (error) {
-      console.error(error);
       throw serviceError(error);
     }
   }
 
   async setAddressInfo(userId, addressDTO) {
     try {
+      logger.info("Setting adderss in setAddressInfo");
       await this.user.findByIdAndUpdate(userId, { address: addressDTO });
     } catch (error) {
-      console.error(error);
       throw serviceError(error);
     }
   }
@@ -187,6 +180,7 @@ export default class userService {
         throw throwError(400, "userId가 유효하지 않습니다.");
       }
 
+      logger.info("Updating User data in updateUser");
       if (avatarUrl) {
         updateUserDTO.avatarUrl = avatarUrl;
 
@@ -314,7 +308,6 @@ export default class userService {
         ]);
       }
     } catch (error) {
-      console.error(error);
       throw serviceError(error);
     }
   }
@@ -329,13 +322,14 @@ export default class userService {
         throw throwError(400, "blockUserId가 유효하지 않습니다.");
       }
 
+      logger.info("Finding Block User in blockUser");
       const blockUser = await this.user.findById(blockUserId);
 
+      logger.info("Block User in blockUser");
       await this.user.findByIdAndUpdate(userId, {
         $addToSet: { blockUsers: blockUser },
       });
     } catch (error) {
-      console.error(error);
       throw serviceError(error);
     }
   }
@@ -350,11 +344,11 @@ export default class userService {
         throw throwError(400, "blockUserId가 유효하지 않습니다.");
       }
 
+      logger.info("Unblock User in unblockUser");
       await this.user.findByIdAndUpdate(userId, {
         $pull: { blockUsers: { _id: blockUserId } },
       });
     } catch (error) {
-      console.error(error);
       throw serviceError(error);
     }
   }
@@ -365,6 +359,7 @@ export default class userService {
         throw throwError(400, "userId가 유효하지 않습니다.");
       }
 
+      logger.info("Delete User in deleteUser");
       await Promise.all([
         this.user.findByIdAndDelete(userId),
         this.review.updateMany(
@@ -396,7 +391,6 @@ export default class userService {
         ),
       ]);
     } catch (error) {
-      console.error(error);
       throw serviceError(error);
     }
   }

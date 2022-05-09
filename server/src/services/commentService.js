@@ -24,6 +24,7 @@ export default class commentService {
         throw throwError(400, "postId가 유효하지 않습니다.");
       }
 
+      logger.info("Finding Comments in getAllPostComments");
       const comments = await this.comment
         .find({ postId }, { __v: 0, blockNumber: 0, postId: 0 })
         .sort({ _id: 1 })
@@ -32,7 +33,6 @@ export default class commentService {
 
       return comments;
     } catch (error) {
-      console.error(error);
       throw serviceError(error);
     }
   }
@@ -47,6 +47,7 @@ export default class commentService {
         throw throwError(400, "postId가 유효하지 않습니다.");
       }
 
+      logger.info("Finding User in createPostParentComment");
       const user = await this.user.findById(userId);
 
       commentDTO.createAt = seoulDate();
@@ -58,6 +59,7 @@ export default class commentService {
 
       const comment = new this.comment(commentDTO);
 
+      logger.info("Creating Parent Comment in createPostParentComment");
       const [newComment] = await Promise.all([
         comment.save(),
         this.user.findByIdAndUpdate(userId, {
@@ -68,7 +70,6 @@ export default class commentService {
 
       return newComment;
     } catch (error) {
-      console.error(error);
       throw serviceError(error);
     }
   }
@@ -87,6 +88,7 @@ export default class commentService {
         throw throwError(400, "parentId가 유효하지 않습니다.");
       }
 
+      logger.info("Finding User in createPostComment");
       const user = await this.user.findById(userId);
 
       commentDTO.createAt = seoulDate();
@@ -97,6 +99,7 @@ export default class commentService {
 
       const comment = new this.comment(commentDTO);
 
+      logger.info("Creating Comment in createPostComment");
       const [newComment] = await Promise.all([
         comment.save(),
         this.comment.findByIdAndUpdate(parentId, {
@@ -110,38 +113,6 @@ export default class commentService {
 
       return newComment;
     } catch (error) {
-      console.error(error);
-      throw serviceError(error);
-    }
-  }
-
-  async createReviewComment(userId, reviewId, commentDTO) {
-    try {
-      if (!isValidObjectId(userId)) {
-        throw throwError(400, "userId가 유효하지 않습니다.");
-      }
-
-      if (!isValidObjectId(reviewId)) {
-        throw throwError(400, "reviewId가 유효하지 않습니다.");
-      }
-
-      commentDTO.createAt = seoulDate();
-      commentDTO.updateAt = seoulDate();
-      commentDTO.reviewId = reviewId;
-
-      const comment = new this.comment(commentDTO);
-
-      const [newComment] = await Promise.all([
-        comment.save(),
-        this.user.findByIdAndUpdate(userId, {
-          $push: { writeComments: comment.id },
-        }),
-        this.review.findByIdAndUpdate(reviewId, { $inc: { commentCount: 1 } }),
-      ]);
-
-      return newComment;
-    } catch (error) {
-      console.error(error);
       throw serviceError(error);
     }
   }
@@ -154,6 +125,7 @@ export default class commentService {
 
       updateCommentDTO.updateAt = seoulDate();
 
+      logger.info("Updating Comment in updateComment");
       const updatedComment = await this.comment.findByIdAndUpdate(
         commentId,
         updateCommentDTO,
@@ -161,7 +133,6 @@ export default class commentService {
       );
       return updatedComment;
     } catch (error) {
-      console.error(error);
       throw serviceError(error);
     }
   }
@@ -176,8 +147,10 @@ export default class commentService {
         throw throwError(400, "commentId가 유효하지 않습니다.");
       }
 
+      logger.info("Finding comment in deleteParentPostComment");
       const comment = await this.comment.findById(commentId);
 
+      logger.info("Delete Parent Comment in deleteParentPostComment");
       if (comment.commentCount > 0) {
         await Promise.all([
           this.post.findByIdAndUpdate(comment.postId, {
@@ -192,7 +165,6 @@ export default class commentService {
         await this.deletePostComment(userId, commentId);
       }
     } catch (error) {
-      console.error(error);
       throw serviceError(error);
     }
   }
@@ -207,8 +179,10 @@ export default class commentService {
         throw throwError(400, "commentId가 유효하지 않습니다.");
       }
 
+      logger.info("Finding comment in deletePostComment");
       const comment = await this.comment.findById(commentId);
 
+      logger.info("Delete comment in deletePostComment");
       await Promise.all([
         this.user.findByIdAndUpdate(userId, {
           $pull: { writeComments: commentId },
@@ -222,7 +196,6 @@ export default class commentService {
         }),
       ]);
     } catch (error) {
-      console.error(error);
       throw serviceError(error);
     }
   }
@@ -237,6 +210,7 @@ export default class commentService {
         throw throwError(400, "commentId가 유효하지 않습니다.");
       }
 
+      logger.info("Block comment in blockComment");
       await Promise.all([
         this.user.findByIdAndUpdate(userId, {
           $addToSet: { blockComments: commentId },
@@ -244,7 +218,6 @@ export default class commentService {
         this.comment.findByIdAndUpdate(commentId, { $inc: { blockNumber: 1 } }),
       ]);
     } catch (error) {
-      console.error(error);
       throw serviceError(error);
     }
   }

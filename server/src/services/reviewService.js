@@ -29,6 +29,7 @@ export default class reviewService {
       let { page, type } = query;
       page = page ? page : 0;
 
+      logger.info("Finding All Reviews in getAllReviews");
       let reviews;
       if (type === "sunhan") {
         reviews = await this.review
@@ -48,7 +49,6 @@ export default class reviewService {
 
       return reviews;
     } catch (error) {
-      console.error(error.message);
       throw serviceError(error);
     }
   }
@@ -59,6 +59,7 @@ export default class reviewService {
         throw throwError(400, "userId가 유효하지 않습니다.");
       }
 
+      logger.info("Finding User in createReview");
       const user = await this.user.findById(userId);
 
       if (imageUrl) {
@@ -72,6 +73,7 @@ export default class reviewService {
       const newReview = new this.review(reviewDTO);
       let review;
 
+      logger.info("Creating Review in createReview");
       if (reviewDTO.sunhanId) {
         [review] = await Promise.all([
           newReview.save(),
@@ -96,7 +98,6 @@ export default class reviewService {
 
       return review;
     } catch (error) {
-      console.error(error.message);
       throw serviceError(error);
     }
   }
@@ -107,6 +108,7 @@ export default class reviewService {
         throw throwError(400, "reviewId가 유효하지 않습니다.");
       }
 
+      logger.info("Finding Review in updateReview");
       const review = await this.review.findById(reviewId);
       if (!imageUrl) {
         updateDTO.imageUrl = review.imageUrl;
@@ -117,6 +119,7 @@ export default class reviewService {
       updateDTO.updateAt = seoulDate();
 
       let updatedReview;
+      logger.info("Updating Review in updateReview");
       if (updateDTO.type === "sunhan") {
         [updatedReview] = await Promise.all([
           this.review.findByIdAndUpdate(reviewId, updateDTO, {
@@ -157,7 +160,6 @@ export default class reviewService {
 
       return updatedReview;
     } catch (error) {
-      console.error(error);
       throw serviceError(error);
     }
   }
@@ -172,6 +174,7 @@ export default class reviewService {
         throw throwError(400, "reviewId가 유효하지 않습니다.");
       }
 
+      logger.info("Block Review in blockReview");
       await Promise.all([
         this.review.findByIdAndUpdate(reviewId, { $inc: { blockNumber: 1 } }),
         this.user.findByIdAndUpdate(userId, {
@@ -179,7 +182,6 @@ export default class reviewService {
         }),
       ]);
     } catch (error) {
-      console.error(error);
       throw serviceError(error);
     }
   }
@@ -196,18 +198,17 @@ export default class reviewService {
 
       const review = await this.review.findById(reviewId);
 
+      logger.info("Delete Review in deleteReview");
       if (type === "sunhan") {
         const sunhan = await this.sunhan.findById(review.sunhanId);
 
         // sunhan reviews fields의 삭제하려는 리뷰가 있다면
         if (sunhan.reviews.find((review) => review.id === reviewId)) {
           // sunhan reviews fields를 filter를 이용해 삭제하려는 리뷰를 제거한 새로운 배열을 만든다
-          console.log(reviewId, "reviewId");
           sunhan.reviews = sunhan.reviews.filter(
             (review) => review.id !== reviewId
           );
 
-          console.log("first", sunhan.reviews);
           // 새로운 reviews 배열이 0보다 크다면
           if (sunhan.reviews.length > 0) {
             const newReview = await this.review
@@ -220,8 +221,6 @@ export default class reviewService {
               sunhan.reviews.unshift(newReview);
             }
           }
-
-          console.log("second", sunhan.reviews);
         }
 
         await Promise.all([
@@ -266,7 +265,6 @@ export default class reviewService {
         throw throwError(400, "해당 type가 존재하지 않습니다.");
       }
     } catch (error) {
-      console.error(error);
       throw serviceError(error);
     }
   }

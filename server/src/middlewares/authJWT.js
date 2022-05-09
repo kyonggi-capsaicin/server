@@ -1,3 +1,4 @@
+import logger from "../config/logger";
 import { verify } from "../jwt/index";
 
 const authJWT = (req, res, next) => {

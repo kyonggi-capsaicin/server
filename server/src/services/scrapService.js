@@ -18,6 +18,8 @@ export default class scrapService {
       }
 
       let scraps;
+
+      logger.info("Finding All Scraps in getScraps");
       if (type === "sunhan") {
         scraps = await this.user
           .findById(userId, { scrapSunhan: 1, _id: 0 })
@@ -38,7 +40,6 @@ export default class scrapService {
 
       return scraps;
     } catch (error) {
-      console.error(error);
       throw serviceError(error);
     }
   }
@@ -53,6 +54,7 @@ export default class scrapService {
         throw throwError(400, "shopId가 유효하지 않습니다.");
       }
 
+      logger.info("Creating Scrap in createScrap");
       if (type === "sunhan") {
         await this.user.findByIdAndUpdate(userId, {
           $addToSet: { scrapSunhan: shopId },
@@ -65,7 +67,6 @@ export default class scrapService {
         throw throwError(400, "해당 type가 존재하지 않습니다.");
       }
     } catch (error) {
-      console.error(error);
       throw serviceError(error);
     }
   }
@@ -80,6 +81,7 @@ export default class scrapService {
         throw throwError(400, "shopId가 유효하지 않습니다.");
       }
 
+      logger.info("Delete Scrap in deleteScrap");
       if (type === "sunhan") {
         await this.user.findByIdAndUpdate(userId, {
           $pull: { scrapSunhan: shopId },
@@ -92,7 +94,6 @@ export default class scrapService {
         throw throwError(400, "해당 type가 존재하지 않습니다.");
       }
     } catch (error) {
-      console.error(error);
       throw serviceError(error);
     }
   }

@@ -26,7 +26,7 @@ export default class authService {
 
       return data;
     } catch (error) {
-      console.error(error.message);
+      throw serviceError(error);
     }
   }
 
@@ -48,8 +48,7 @@ export default class authService {
 
       return exUser;
     } catch (error) {
-      console.error(error);
-      throw Error(error.message);
+      throw serviceError(error);
     }
   }
 
@@ -85,7 +84,6 @@ export default class authService {
 
       return user;
     } catch (error) {
-      console.error(error);
       throw serviceError(error);
     }
   }
