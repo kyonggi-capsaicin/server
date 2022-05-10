@@ -29,7 +29,7 @@ export const reviewSchema = new mongoose.Schema({
 
   content: {
     type: String,
-    required: true,
+    // required: true,
   },
 
   imageUrl: {

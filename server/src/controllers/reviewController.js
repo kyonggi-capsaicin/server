@@ -25,7 +25,7 @@ export const createReview = async (req, res, next) => {
 
     let filename = null;
     if (req.file) {
-      filename = req.file.filename;
+      filename = req.file.key;
     }
 
     const review = await reviewServiceInstance.createReview(
@@ -47,7 +47,7 @@ export const updateReview = async (req, res, next) => {
 
     let filename = null;
     if (req.file) {
-      filename = req.file.filename;
+      filename = req.file.key;
     }
 
     const { id: reviewId } = req.params;

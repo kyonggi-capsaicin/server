@@ -63,7 +63,7 @@ export default class reviewService {
       const user = await this.user.findById(userId);
 
       if (imageUrl) {
-        reviewDTO.imageUrl = imageUrl;
+        reviewDTO.imageUrl = imageUrl.split("/")[1];
       }
 
       reviewDTO.writer = user;
@@ -113,7 +113,7 @@ export default class reviewService {
       if (!imageUrl) {
         updateDTO.imageUrl = review.imageUrl;
       } else {
-        updateDTO.imageUrl = imageUrl;
+        reviewDTO.imageUrl = imageUrl.split("/")[1];
       }
 
       updateDTO.updateAt = seoulDate();

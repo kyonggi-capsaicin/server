@@ -100,7 +100,7 @@ export const updateUser = async (req, res, next) => {
 
     let filename = null;
     if (req.file) {
-      filename = req.file.filename;
+      filename = req.file.key;
     }
 
     await userServiceInstance.updateUser(req.id, req.body, filename);

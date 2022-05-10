@@ -1,6 +1,8 @@
 import "reflect-metadata";
 import express from "express";
 import morgan from "morgan";
+import helmet from "helmet";
+import hpp from "hpp";
 import logger from "../config/logger";
 
 import dataRouter from "../routers/dataRouter";
@@ -16,9 +18,15 @@ import cardRouter from "../routers/cardRouter";
 import { generateFakeData } from "../faker";
 
 export default (app) => {
-  app.use(express.json());
-  app.use(morgan("dev"));
+  if (process.env.NODE_ENV === "production") {
+    app.use(morgan("combined"));
+    app.use(hpp());
+    app.use(helmet());
+  } else {
+    app.use(morgan("dev"));
+  }
 
+  app.use(express.json());
   app.use("/img", express.static("uploads"));
 
   //faker

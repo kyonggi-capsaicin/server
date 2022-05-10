@@ -182,7 +182,7 @@ export default class userService {
 
       logger.info("Updating User data in updateUser");
       if (avatarUrl) {
-        updateUserDTO.avatarUrl = avatarUrl;
+        updateUserDTO.avatarUrl = avatarUrl.split("/")[1];
 
         // avatarUrl, nickname 모두 변경하는 경우
         if (updateUserDTO.nickname) {
