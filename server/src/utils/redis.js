@@ -14,7 +14,7 @@ if (process.env.NODE_ENV === "dev") {
   (async () => {
     client = createClient({
       host: "redis-server",
-      port: REDIS_PORT_PRO,
+      port: process.env.REDIS_PORT_PRO,
     });
 
     client.on("error", (err) => console.log("Redis Client Error", err));
