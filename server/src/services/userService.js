@@ -6,6 +6,7 @@ import Sunhan from "../models/sunhanShop";
 import Comment from "../models/comments";
 import throwError from "../utils/throwError";
 import serviceError from "../utils/serviceError";
+import redisClient from "../utils/redis";
 import { isValidObjectId, Types } from "mongoose";
 import logger from "../config/logger";
 
@@ -390,6 +391,8 @@ export default class userService {
           }
         ),
       ]);
+
+      redisClient.del(req.id);
     } catch (error) {
       throw serviceError(error);
     }

@@ -45,7 +45,7 @@ export const naverLogin = async (req, res, next) => {
     const accessToken = sign(user);
     const refreshToken = refresh();
 
-    await redisClient.set(user.id, refreshToken);
+    redisClient.set(user.id, refreshToken);
 
     res
       .status(200)
@@ -96,7 +96,7 @@ export const kakaoLogin = async (req, res, next) => {
     const accessToken = sign(user);
     const refreshToken = refresh();
 
-    await redisClient.set(user.id, refreshToken);
+    redisClient.set(user.id, refreshToken);
 
     logger.info(`GET /users/kakao 200 Response: "success: true"`);
     res
@@ -144,7 +144,7 @@ export const googleLogin = async (req, res, next) => {
     const accessToken = sign(user);
     const refreshToken = refresh();
 
-    await redisClient.set(user.id, refreshToken);
+    redisClient.set(user.id, refreshToken);
 
     logger.info(`GET /users/google 200 Response: "success: true"`);
     res
