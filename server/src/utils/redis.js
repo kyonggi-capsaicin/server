@@ -13,7 +13,7 @@ if (process.env.NODE_ENV === "dev") {
 } else {
   (async () => {
     client = createClient({
-      host: "redis-server",
+      url: "redis-server",
       port: process.env.REDIS_PORT_PRO,
     });
 
