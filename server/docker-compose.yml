@@ -9,7 +9,7 @@ services:
       - "80:80"
       - "443:443"
     environment:
-      CERTBOT_EMAIL: yoteamo7@naver.com
+      CERTBOT_EMAIL: magicnc7@gmail.com
     restart: always
     volumes:
       - ../conf.d:/etc/nginx/user.conf.d:ro
