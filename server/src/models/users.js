@@ -9,12 +9,12 @@ const userSchema = new mongoose.Schema({
 
   avatarUrl: {
     type: String,
-    default: "902e5693-e0bb-4097-8ab5-b81a71003fe4.jpg",
+    default: "f0e3b6e9-d6fa-4867-a966-7fe689f9c3c2.jpg",
   },
 
   address: {
-    lat: { type: Number },
-    lng: { type: Number },
+    lat: { type: Number, default: 37.300485 },
+    lng: { type: Number, default: 127.035833 },
   },
 
   email: {
