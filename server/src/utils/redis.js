@@ -25,7 +25,7 @@ let client;
 if (process.env.NODE_ENV === "production") {
   client = createClient({
     host: "redis-server",
-    port: REDIS_PORT_PRO,
+    port: process.env.REDIS_PORT_PRO,
   });
 } else {
   client = createClient();
