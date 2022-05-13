@@ -77,6 +77,8 @@ export default class userService {
           blockReviews: 0,
           blockComments: 0,
           naverId: 0,
+          googleId: 0,
+          kakaoId: 0,
           blockUsers: 0,
           childCard: 0,
           __v: 0,
@@ -151,6 +153,7 @@ export default class userService {
           blockReviews: 0,
           blockComments: 0,
           naverId: 0,
+          googleId: 0,
           blockUsers: 0,
           childCard: 0,
           __v: 0,
@@ -392,7 +395,7 @@ export default class userService {
         ),
       ]);
 
-      redisClient.del(req.id);
+      redisClient.del(userId);
     } catch (error) {
       throw serviceError(error);
     }

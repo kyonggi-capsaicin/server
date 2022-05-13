@@ -70,6 +70,11 @@ export default class sunhanService {
       let { lat, lng, page, category, sort } = query;
       page = page ? page : 0;
 
+      if (!lat || !lng) {
+        lat = 37.300485;
+        lng = 127.035833;
+      }
+
       const variable = sort === "name" ? { name: 1 } : {};
 
       logger.info("Finding All Sunhans in getAllSunhanGuest");
@@ -182,6 +187,11 @@ export default class sunhanService {
     try {
       let { lat, lng, name, page } = query;
       page = page ? page : 0;
+
+      if (!lat || !lng) {
+        lat = 37.300485;
+        lng = 127.035833;
+      }
 
       logger.info("Searching Sunhans in getSearchSunhanGuest");
       const sunhans = await this.sunhan

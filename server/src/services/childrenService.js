@@ -51,6 +51,7 @@ export default class childrenService {
             fullCityName: 0,
             lat: 0,
             lng: 0,
+            reviews: 0,
           }
         )
         .skip(page * 10)
@@ -67,6 +68,11 @@ export default class childrenService {
     try {
       let { page, sort, lat, lng } = query;
       page = page ? page : 0;
+
+      if (!lat || !lng) {
+        lat = 37.300485;
+        lng = 127.035833;
+      }
 
       const variable = sort === "name" ? { name: 1 } : {};
 
@@ -94,6 +100,7 @@ export default class childrenService {
             fullCityName: 0,
             lat: 0,
             lng: 0,
+            reviews: 0,
           }
         )
         .skip(page * 10)
@@ -177,6 +184,7 @@ export default class childrenService {
             fullCityName: 0,
             lat: 0,
             lng: 0,
+            reviews: 0,
           }
         )
         .skip(page * 10)
@@ -190,7 +198,11 @@ export default class childrenService {
 
   async getSearchChildrenShopGuest(query) {
     try {
-      const { name, page, lat, lng } = query;
+      let { name, page, lat, lng } = query;
+      if (!lat || !lng) {
+        lat = 37.300485;
+        lng = 127.035833;
+      }
 
       logger.info("Finding childrenShops in getSearchChildrenShopGuest");
       const childrenShops = await this.child
@@ -217,6 +229,7 @@ export default class childrenService {
             fullCityName: 0,
             lat: 0,
             lng: 0,
+            reviews: 0,
           }
         )
         .skip(page * 10)
