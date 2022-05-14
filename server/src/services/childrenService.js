@@ -118,31 +118,51 @@ export default class childrenService {
       if (!mongoose.isValidObjectId(childrenShopId)) {
         throw throwError(400, "childrenShopId가 유효하지 않습니다.");
       }
-
+      console.log(childrenShopId);
       logger.info("Finding childrenShop in getChildrenShop");
-      const childrenShop = await this.child.aggregate([
-        { $match: { _id: mongoose.Types.ObjectId(childrenShopId) } },
-        { $unwind: "$reviews" },
-        { $sort: { "reviews._id": -1 } },
-        {
-          $group: {
-            _id: "$_id",
-            name: { $first: "$name" },
-            address: { $first: "$address" },
-            phoneNumber: { $first: "$phoneNumber" },
-            weekdayStartTime: { $first: "$weekdayStartTime" },
-            weekdayEndTime: { $first: "$weekdayEndTime" },
-            weekendStartTime: { $first: "$weekendStartTime" },
-            weekendEndTime: { $first: "$weekendEndTime" },
-            holydayStartTime: { $first: "$holydayStartTime" },
-            holydayEndTime: { $first: "$holydayEndTime" },
-            category: { $first: "$category" },
-            reviews: { $push: "$reviews" },
-          },
-        },
-      ]);
 
-      return childrenShop[0];
+      let childrenShop;
+      const child = await this.child.findById(childrenShopId, {
+        location: 0,
+        __v: 0,
+        code: 0,
+        cityName: 0,
+        fullCityName: 0,
+        fullCityNameCode: 0,
+        lat: 0,
+        lng: 0,
+        detailCategory: 0,
+      });
+
+      if (child.reviews.length > 0) {
+        childrenShop = await this.child.aggregate([
+          { $match: { _id: mongoose.Types.ObjectId(childrenShopId) } },
+          { $unwind: "$reviews" },
+          { $sort: { "reviews._id": -1 } },
+          {
+            $group: {
+              _id: "$_id",
+              name: { $first: "$name" },
+              address: { $first: "$address" },
+              phoneNumber: { $first: "$phoneNumber" },
+              weekdayStartTime: { $first: "$weekdayStartTime" },
+              weekdayEndTime: { $first: "$weekdayEndTime" },
+              weekendStartTime: { $first: "$weekendStartTime" },
+              weekendEndTime: { $first: "$weekendEndTime" },
+              holydayStartTime: { $first: "$holydayStartTime" },
+              holydayEndTime: { $first: "$holydayEndTime" },
+              category: { $first: "$category" },
+              reviews: { $push: "$reviews" },
+            },
+          },
+        ]);
+
+        childrenShop = childrenShop[0];
+      } else {
+        childrenShop = child;
+      }
+
+      return childrenShop;
     } catch (error) {
       throw serviceError(error);
     }

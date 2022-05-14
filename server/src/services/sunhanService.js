@@ -119,26 +119,42 @@ export default class sunhanService {
       }
 
       logger.info("Finding Sunhan in getSunhan");
-      const sunhan = await this.sunhan.aggregate([
-        { $match: { _id: mongoose.Types.ObjectId(sunhanId) } },
-        { $unwind: "$reviews" },
-        { $sort: { "reviews._id": -1 } },
-        {
-          $group: {
-            _id: "$_id",
-            name: { $first: "$name" },
-            openingHours: { $first: "$openingHours" },
-            address: { $first: "$address" },
-            tatget: { $first: "$tatget" },
-            offer: { $first: "$offer" },
-            phoneNumber: { $first: "$phoneNumber" },
-            category: { $first: "$category" },
-            reviews: { $push: "$reviews" },
-          },
-        },
-      ]);
 
-      return sunhan[0];
+      let sunhan;
+      const sunhanShop = await this.sunhan.findById(sunhanId, {
+        location: 0,
+        lat: 0,
+        lng: 0,
+        __v: 0,
+        image: 0,
+      });
+
+      if (sunhanShop.reviews.length > 0) {
+        sunhan = await this.sunhan.aggregate([
+          { $match: { _id: mongoose.Types.ObjectId(sunhanId) } },
+          { $unwind: "$reviews" },
+          { $sort: { "reviews._id": -1 } },
+          {
+            $group: {
+              _id: "$_id",
+              name: { $first: "$name" },
+              openingHours: { $first: "$openingHours" },
+              address: { $first: "$address" },
+              tatget: { $first: "$tatget" },
+              offer: { $first: "$offer" },
+              phoneNumber: { $first: "$phoneNumber" },
+              category: { $first: "$category" },
+              reviews: { $push: "$reviews" },
+            },
+          },
+        ]);
+
+        sunhan = sunhan[0];
+      } else {
+        sunhan = sunhanShop;
+      }
+
+      return sunhan;
     } catch (error) {
       throw serviceError(error);
     }
