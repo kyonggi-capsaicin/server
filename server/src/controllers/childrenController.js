@@ -1,5 +1,6 @@
 import { Container } from "typedi";
 import childrenService from "../services/childrenService";
+import throwError from "../utils/throwError";
 import logger from "../config/logger";
 
 const childrenServiceInstance = Container.get(childrenService);

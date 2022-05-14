@@ -3,6 +3,7 @@ import axios from "axios";
 import request from "../core";
 import Child from "../models/childCardShop";
 import Sunhan from "../models/sunhanShop";
+import throwError from "../utils/throwError";
 import serviceError from "../utils/serviceError";
 
 axios.defaults.timeout = 60000;

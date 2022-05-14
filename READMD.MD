@@ -114,6 +114,8 @@ https://docs.typestack.community/typedi/usage-without-typescript/01-getting-star
 
 https://blog.joon-lab.com/164
 
+https://velog.io/@jmyoon8/series/nextJS%EB%B0%B0%ED%8F%AC%ED%95%98%EA%B8%B0pm2%EB%AC%B4%EC%A4%91%EB%8B%A8%EB%B0%B0%ED%8F%ACdockerec2
+
 ### Docker 관련
 
 ---
