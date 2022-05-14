@@ -127,6 +127,7 @@ export default class sunhanService {
         lng: 0,
         __v: 0,
         image: 0,
+        detailCategory: 0,
       });
 
       if (sunhanShop.reviews.length > 0) {
