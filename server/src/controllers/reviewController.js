@@ -24,6 +24,8 @@ export const createReview = async (req, res, next) => {
     logger.info(`POST /reviews"`);
 
     let filename = null;
+
+    logger.info(`req.file : ${req.file}`);
     if (req.file) {
       filename = req.file.key;
     }

@@ -72,7 +72,7 @@ export default class reviewService {
       reviewDTO.updateAt = seoulDate();
 
       const newReview = new this.review(reviewDTO);
-      logger.info(`reviewDTO: ${reviewDTO}`);
+
       let review;
 
       logger.info("Creating Review in createReview");

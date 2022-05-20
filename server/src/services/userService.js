@@ -196,7 +196,8 @@ export default class userService {
               {},
               {
                 $set: {
-                  "reviews.$[element].writer.avatarUrl": avatarUrl,
+                  "reviews.$[element].writer.avatarUrl":
+                    updateUserDTO.avatarUrl,
                   "reviews.$[element].writer.nickname": updateUserDTO.nickname,
                 },
               },
@@ -206,7 +207,7 @@ export default class userService {
               { "writer._id": userId },
               {
                 $set: {
-                  "writer.avatarUrl": avatarUrl,
+                  "writer.avatarUrl": updateUserDTO.avatarUrl,
                   "writer.nickname": updateUserDTO.nickname,
                 },
               }
@@ -215,7 +216,7 @@ export default class userService {
               { "writer._id": userId },
               {
                 $set: {
-                  "writer.avatarUrl": avatarUrl,
+                  "writer.avatarUrl": updateUserDTO.avatarUrl,
                   "writer.nickname": updateUserDTO.nickname,
                 },
               }
@@ -224,7 +225,7 @@ export default class userService {
               { "writer._id": userId },
               {
                 $set: {
-                  "writer.avatarUrl": avatarUrl,
+                  "writer.avatarUrl": updateUserDTO.avatarUrl,
                   "writer.nickname": updateUserDTO.nickname,
                 },
               }
@@ -240,7 +241,7 @@ export default class userService {
             {},
             {
               $set: {
-                "reviews.$[element].writer.avatarUrl": avatarUrl,
+                "reviews.$[element].writer.avatarUrl": updateUserDTO.avatarUrl,
               },
             },
             { arrayFilters: [{ "element.writer._id": userId }] }
@@ -249,7 +250,7 @@ export default class userService {
             { "writer._id": userId },
             {
               $set: {
-                "writer.avatarUrl": avatarUrl,
+                "writer.avatarUrl": updateUserDTO.avatarUrl,
               },
             }
           ),
@@ -257,7 +258,7 @@ export default class userService {
             { "writer._id": userId },
             {
               $set: {
-                "writer.avatarUrl": avatarUrl,
+                "writer.avatarUrl": updateUserDTO.avatarUrl,
               },
             }
           ),
@@ -265,7 +266,7 @@ export default class userService {
             { "writer._id": userId },
             {
               $set: {
-                "writer.avatarUrl": avatarUrl,
+                "writer.avatarUrl": updateUserDTO.avatarUrl,
               },
             }
           ),
