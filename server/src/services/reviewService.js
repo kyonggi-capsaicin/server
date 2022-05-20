@@ -62,6 +62,7 @@ export default class reviewService {
       logger.info("Finding User in createReview");
       const user = await this.user.findById(userId);
 
+      logger.info(`imageUrl: ${imageUrl}`);
       if (imageUrl) {
         reviewDTO.imageUrl = imageUrl.split("/")[1];
       }
@@ -71,6 +72,7 @@ export default class reviewService {
       reviewDTO.updateAt = seoulDate();
 
       const newReview = new this.review(reviewDTO);
+      logger.info(`reviewDTO: ${reviewDTO}`);
       let review;
 
       logger.info("Creating Review in createReview");
@@ -96,6 +98,7 @@ export default class reviewService {
         ]);
       }
 
+      logger.info(`Review: ${review}`);
       return review;
     } catch (error) {
       throw serviceError(error);
