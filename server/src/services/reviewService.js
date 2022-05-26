@@ -216,6 +216,7 @@ export default class reviewService {
           if (sunhan.reviews.length > 0) {
             const newReview = await this.review
               .findOne({
+                sunhanId: review.sunhanId,
                 _id: { $lt: sunhan.reviews[0].id },
               })
               .sort({ _id: -1 });
@@ -247,6 +248,7 @@ export default class reviewService {
           if (childrenShop.reviews.length > 0) {
             const newReview = await this.review
               .findOne({
+                childrenId: review.childrenId,
                 _id: { $lt: childrenShop.reviews[0].id },
               })
               .sort({ _id: -1 });
